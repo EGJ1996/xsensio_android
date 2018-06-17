@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Sensor Reading - Common settings"
+        android:key="pref_key_sensor_reading">
+
+    <EditTextPreference
+        android:key="num_bytes_per_sample"
+        android:persistent="true"
+        android:numeric="integer"
+        android:title="Number of bytes per sample"
+        android:dialogTitle="Number of bytes per sample"
+        android:dialogMessage="Default 2. WARNING: this application support different values than 2 but the MCU must be adapted in consequence"
+        android:defaultValue="@string/num_bytes_per_sample_def_val"/>
+
+        <ListPreference
+            android:key="sampling_frequency"
+            android:title="CPU frequency"
+            android:entries="@array/cpu_freq_entries"
+            android:entryValues="@array/cpu_freq_values"
+            android:defaultValue="5" />
+
+        <EditTextPreference
+            android:key="sensor_select"
+            android:title="Sensor Select"
+            android:persistent="true"
+            android:numeric="integer"
+            android:dialogTitle="Select Sensor please"
+            android:dialogMessage="But ranging from 0 to 12"
+            android:defaultValue="5"/>
+
+    <ListPreference
+        android:key="graph_time_scale"
+        android:title="Result graph time scale"
+        android:entries="@array/graph_time_scale_entries"
+        android:entryValues="@array/graph_time_scale_values"
+        android:defaultValue="@string/graph_time_scale_def_val" />
+
+    <EditTextPreference
+        android:key="sensor_reading_max_num_retries"
+        android:persistent="true"
+        android:numeric="integer"
+        android:title="Maximum number of read retries"
+        android:dialogTitle="Maximum number of read retries"
+        android:dialogMessage="Default is 1000"
+        android:defaultValue="@string/sensor_reading_max_num_retries_def_val"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Sensor Reading - Readout case 1"
+        android:key="pref_key_sensor_reading">
+
+        <EditTextPreference
+            android:key="num_bits_per_sample_roc1"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of bits per sample"
+            android:dialogTitle="Number of bits per sample"
+            android:defaultValue="@string/num_bits_per_sample_roc1_def_val"/>
+
+        <EditTextPreference
+            android:key="num_samples_roc1"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of samples"
+            android:dialogTitle="Number of samples"
+            android:defaultValue="@string/num_samples_roc1_def_val"/>
+
+        <EditTextPreference
+            android:key="value_ref_roc1"
+            android:persistent="true"
+            android:numeric="decimal"
+            android:title="Reference voltage"
+            android:dialogTitle="Reference voltage [V]"
+            android:dialogMessage="Default is 3.3 V"
+            android:defaultValue="@string/value_ref_roc1_def_val"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Sensor Reading - Readout case 2"
+        android:key="pref_key_sensor_reading">
+
+        <EditTextPreference
+            android:key="num_bits_per_sample_roc2"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of bits per sample"
+            android:dialogTitle="Number of bits per sample"
+            android:defaultValue="@string/num_bits_per_sample_roc2_def_val"/>
+
+        <EditTextPreference
+            android:key="num_samples_roc2"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of samples"
+            android:dialogTitle="Number of samples"
+            android:defaultValue="@string/num_samples_roc2_def_val"/>
+
+        <EditTextPreference
+            android:key="value_ref_roc2"
+            android:persistent="true"
+            android:numeric="decimal"
+            android:title="Reference voltage"
+            android:dialogTitle="Reference voltage [V]"
+            android:defaultValue="@string/value_ref_roc2_def_val"/>
+
+        <EditTextPreference
+            android:key="num_samples_for_derivative"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of samples to compute the derivative"
+            android:dialogTitle="Number of samples to compute the derivative"
+            android:defaultValue="@string/num_samples_for_derivative_def_val"/>
+
+        <EditTextPreference
+            android:key="deadband_size"
+            android:persistent="true"
+            android:numeric="decimal"
+            android:title="Size of the dead band"
+            android:dialogTitle="Size of the dead band"
+            android:defaultValue="@string/deadband_size_def_val"/>
+
+        <EditTextPreference
+            android:key="manual_y_axis_plot_2_case2"
+            android:persistent="true"
+            android:numeric="decimal"
+            android:title="Plot 2 manual value (y-axis)"
+            android:dialogTitle="Plot 2 manual value (y-axis)"
+            android:defaultValue="@string/manual_y_axis_plot_2_case2_def_val"/>
+
+        <EditTextPreference
+            android:key="manual_y_axis_plot_3_case2"
+            android:persistent="true"
+            android:numeric="decimal"
+            android:title="Plot 3 manual value (y-axis)"
+            android:dialogTitle="Plot 3 manual value (y-axis)"
+            android:defaultValue="@string/manual_y_axis_plot_3_case2_def_val"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Sensor Reading - Readout case 3"
+        android:key="pref_key_sensor_reading">
+
+        <EditTextPreference
+            android:key="num_bits_per_sample_roc3"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of bits per sample"
+            android:dialogTitle="Number of bits per sample"
+            android:defaultValue="@string/num_bits_per_sample_roc3_def_val"/>
+
+        <EditTextPreference
+            android:key="num_samples_roc3"
+            android:persistent="true"
+            android:numeric="integer"
+            android:title="Number of samples"
+            android:dialogTitle="Number of samples"
+            android:defaultValue="@string/num_samples_roc3_def_val"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Calibration"
+        android:key="pref_key_calibration">
+
+        <EditTextPreference
+            android:key="calibration_folder_path"
+            android:persistent="true"
+            android:title="Calibration profiles folder path"
+            android:dialogTitle="Calibration folder path"
+            android:dialogMessage="Default is NFCSensorComm/Calibration profiles"
+            android:defaultValue="@string/calibration_folder_path_def_val"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

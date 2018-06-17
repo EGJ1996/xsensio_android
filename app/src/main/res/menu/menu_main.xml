@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_calibration"
+        android:title="Calibration"
+        myapp:showAsAction="collapseActionView" />
+    <item android:id="@+id/action_settings"
+        android:title="Settings"
+        myapp:showAsAction="collapseActionView" />
+    <item android:id="@+id/action_files"
+        android:title="File Manager"
+        myapp:showAsAction="collapseActionView"/>
+</menu>

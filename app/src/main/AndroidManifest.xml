@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xsensio.nfcsensorcomm">
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/logo_xsensio"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".mainactivity.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".mainactivity.sensorcomm.SensorCommIntentService"
+            android:exported="false" />
+        <service
+            android:name=".mainactivity.phonetagcomm.PhoneTagCommIntentService"
+            android:exported="false" />
+        <service
+            android:name=".mainactivity.phonemcucomm.PhoneMcuCommIntentService"
+            android:exported="false" />
+        <service
+            android:name=".mainactivity.tagconfiguration.NfcTagConfigurationIntentService"
+            android:exported="false" />
+
+        <activity android:name=".calibration.CalibrationActivity" />
+        <activity android:name=".sensorresult.case1.VirtualSensorResultCase1Activity" />
+        <activity android:name=".settings.SettingsActivity" />
+        <activity android:name=".mainactivity.tagconfiguration.NfcTagConfigurationFragment" />
+        <activity android:name=".sensorresult.case3.VirtualSensorResultCase3Activity" />
+        <activity android:name=".sensorresult.case2.VirtualSensorResultCase2Activity" />
+        <activity android:name=".files.FileManagerActivity"></activity>
+    </application>
+
+</manifest>

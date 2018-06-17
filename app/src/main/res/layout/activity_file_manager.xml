@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xsensio.nfcsensorcomm.files.FileManagerActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_height="0dp"
+            android:id="@+id/fileTextView"
+            android:layout_width="fill_parent"
+            android:padding="15dp"
+            android:text="File Manager"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="0dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_weight="10"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_height="0dp"
+            android:id="@+id/fileRecyclerView"
+            android:layout_width="fill_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="68dp"
+            android:layout_weight="80"/>
+
+        <LinearLayout
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="10"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="0dp"
+                android:id="@+id/file_savename"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:hint="File name ..." />
+            <Button
+                android:layout_width="wrap_content"
+                android:id="@+id/file_save"
+                android:layout_height="match_parent"
+                android:text="Save New"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Tag data (NDEF) content"/>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/ndef_text_edt"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:hint="Text to store in the tag" />
+
+        <Button
+            android:id="@+id/read_ndef_btn"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:text="Read"
+            android:layout_weight="0.29"
+            style="@style/Widget.Button.Simple"/>
+
+        <Button
+            android:id="@+id/write_ndef_btn"
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:text="Write"
+            android:layout_weight="0.29"
+            style="@style/Widget.Button.Simple"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/white">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:layout_marginRight="1dp"
+                android:text="Tag memory content"/>
+
+            <Button
+                android:id="@+id/tag_memory_help_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                style="@style/Widget.Button.Help"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <Button
+                android:id="@+id/read_all_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Read all"
+                style="@style/Widget.Button.Simple"/>
+            <Button
+                android:id="@+id/reset_tag_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset Tag"
+                style="@style/Widget.Button.Simple"/>
+        </LinearLayout>
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>
