@@ -31,14 +31,6 @@ import java.util.List;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeScreen.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeScreen#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeScreen extends Fragment{
 
     private OnFragmentInteractionListener mListener;
@@ -47,7 +39,6 @@ public class HomeScreen extends Fragment{
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static HomeScreen newInstance() {
         HomeScreen fragment = new HomeScreen();
         return fragment;
@@ -116,7 +107,6 @@ public class HomeScreen extends Fragment{
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
