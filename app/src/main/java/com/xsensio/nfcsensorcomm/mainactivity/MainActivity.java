@@ -1,9 +1,12 @@
 package com.xsensio.nfcsensorcomm.mainactivity;
 
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,14 +18,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationActivity;
-import com.xsensio.nfcsensorcomm.files.FileManager;
 import com.xsensio.nfcsensorcomm.files.FileManagerActivity;
 import com.xsensio.nfcsensorcomm.mainactivity.tagconfiguration.NfcTagConfigurationContract;
 import com.xsensio.nfcsensorcomm.mainactivity.tagconfiguration.NfcTagConfigurationFragment;
@@ -43,13 +48,15 @@ import com.xsensio.nfcsensorcomm.mainactivity.tagconfiguration.NfcTagConfigurati
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View,HomeScreen.OnFragmentInteractionListener {
 
     private static final String TAG = "MyActivity";
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private FrameLayout mHomeScreen;
+    public HomeScreen homeScreen=new HomeScreen();
 
     private NfcAdapter mNfcAdapter;
     private PendingIntent mPendingIntent;
@@ -94,6 +101,36 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mPendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
+        mHomeScreen=(FrameLayout) findViewById(R.id.home_screen_container);
+        android.support.v4.app.FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.home_screen_container,homeScreen);
+        fragmentTransaction.commit();
+    }
+
+    public void showHomeScreen(){
+        mToolbar.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        mHomeScreen.setVisibility(View.VISIBLE);
+        ishomescreen=true;
+    }
+
+    public void hideHomeScreen(){
+        mToolbar.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
+        mTabLayout.setVisibility(View.VISIBLE);
+        mHomeScreen.setVisibility(View.GONE);
+        ishomescreen=false;
+    }
+
+    public boolean ishomescreen=true;
+    @Override
+    public void onBackPressed() {
+        if(ishomescreen){
+            super.onBackPressed();
+        } else {
+            showHomeScreen();
+        }
     }
 
     SensorCommFragment sensorCommFragment;
@@ -155,6 +192,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -205,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     public void onResume() {
         super.onResume();
-
         if (mNfcAdapter != null) {
 
             if (!mNfcAdapter.isEnabled()) {

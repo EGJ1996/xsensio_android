@@ -48,4 +48,11 @@
         android:focusableInTouchMode="true"
         android:visibility="gone" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/home_screen_container">
+
+    </FrameLayout>
+
 </android.support.design.widget.CoordinatorLayout>

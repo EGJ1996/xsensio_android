@@ -21,7 +21,7 @@ public enum VirtualSensorDefinitionCase2 implements VirtualSensorDefinition {
     SENSOR_3("Sensor 3",
             new PlotMetadata("Voltage vs concentration", "Voltage", "[V]", "concentration", "[mol/l]", false),
             new PlotMetadata("Voltage VS time", "time", "", "Voltage", "[V]", false),
-            new PlotMetadata("dv/dt VS time", "time", "", "dv/dt", "", false),
+            new PlotMetadata("Temperature VS time", "time", "", "Temperature", "C", false),
             new PlotMetadata("concentration VS time", "time", "", "concentration", "[10^(-pH)](mol/l)", true)),
     SENSOR_4("Sensor 4",
             new PlotMetadata("Voltage vs concentration", "concentration", "[mol/l]", "Voltage", "[V]", false),

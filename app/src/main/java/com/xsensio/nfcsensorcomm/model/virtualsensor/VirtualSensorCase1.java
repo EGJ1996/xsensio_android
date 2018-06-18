@@ -141,18 +141,15 @@ public abstract class VirtualSensorCase1 implements VirtualSensor {
 
             // Compute effective sampling frequency
             mEffectiveSamplingFrequency = overallSamplingFrequency/mCommand.getNumSensorsSelected();
-            //TODO this is where they convert bytes to numbers ? but what does these numbers mean
             // Group bytes to obtain samples as decimal numbers
 
             mSamples = DataUtils.bytesToDecimals(mReadoutsAsBytes, mNumBytesPerSample, numBitsPerSample, valueRef);
-            //TODO :) Lets do the processing here
             // Map integer to concentration/pH/...
             mMappedData = computeMappedData(profile);
         }
 
 
         private List<Double> computeMappedData(CalibrationProfile profile) {
-            //TODO Here is where they convert integers into graph points
             if (profile == null) {
                 return new ArrayList<>();
             }

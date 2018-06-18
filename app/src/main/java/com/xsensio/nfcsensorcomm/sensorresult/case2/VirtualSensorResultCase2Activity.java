@@ -151,11 +151,15 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
         //savetheshit(dataContainer);
         final VirtualSensorDefinitionCase2 virtualSensorDefinition = (VirtualSensorDefinitionCase2) virtualSensor.getVirtualSensorDefinition();
 
-        mIdealFrequency.setText(Double.toString(dataContainer.freqMCU));
+        mIdealFrequency.setText(Double.toString(dataContainer.idealSampleRate));
         // Render plots
         renderSamplesVsTimePlot(virtualSensorDefinition, dataContainer);
         renderDerivativesVsTimePlot(virtualSensorDefinition, dataContainer);
-        renderMappedDataVsTimePlot(virtualSensorDefinition, dataContainer);
+        if(dataContainer.sensorName=="Sensor 3"){
+            mMappedDataVsTimePlot.setVisibility(View.INVISIBLE);
+        } else {
+            renderMappedDataVsTimePlot(virtualSensorDefinition, dataContainer);
+        }
     }
 
     private void refreshCalibrationProfileSpinner() {
@@ -204,6 +208,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
 
         NumberFormat formatter = new DecimalFormat("0.###E0");
         String averageDerivativeAsString = formatter.format(dataContainer.getAverageDerivative());
+        averageDerivativeAsString=averageDerivativeAsString.replace("E","*10^");
         mAverageDerivativeTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageDerivativeAsString);
     }
 
@@ -248,6 +253,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
 
         NumberFormat formatter = new DecimalFormat("0.###E0");
         String averageMappedDataAsString = formatter.format(dataContainer.getAverageMappedData());
+        averageMappedDataAsString=averageMappedDataAsString.replace("E","*10^");
         mAverageMappedDataTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageMappedDataAsString);
     }
 

@@ -1,0 +1,152 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xsensio.nfcsensorcomm.mainactivity.HomeScreen"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:src="@drawable/xsensio770x308"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginRight="10pt"
+                android:layout_marginLeft="10pt">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sensor 1"
+                    android:gravity="center"
+                    android:textSize="9pt"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Value"
+                    android:editable="false"
+                    android:id="@+id/hm_sensor1_val"/>
+                <ProgressBar
+                    android:id="@+id/hm_sensor1_prog"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                </ProgressBar>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginRight="10pt"
+                android:layout_marginLeft="10pt">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sensor 2"
+                    android:gravity="center"
+                    android:textSize="9pt"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Value"
+                    android:editable="false"
+                    android:id="@+id/hm_sensor2_val"/>
+                <ProgressBar
+                    android:id="@+id/hm_sensor2_prog"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                </ProgressBar>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginRight="10pt"
+                android:layout_marginLeft="10pt">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sensor 3"
+                    android:gravity="center"
+                    android:textSize="9pt"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Value"
+                    android:editable="false"
+                    android:id="@+id/hm_sensor3_val"/>
+                <ProgressBar
+                    android:id="@+id/hm_sensor3_prog"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                </ProgressBar>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="read sensors"
+                    android:id="@+id/hm_read" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_gravity="right"
+                android:layout_width="20pt"
+                android:layout_height="20pt"
+                android:layout_marginRight="10pt"
+                android:layout_marginBottom="5pt"
+                android:src="@drawable/input_grey_192x192"
+                android:id="@+id/hm_more"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -29,6 +30,8 @@ import com.xsensio.nfcsensorcomm.files.FileManagerActivity;
 import com.xsensio.nfcsensorcomm.mainactivity.CommContract;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationActivity;
+import com.xsensio.nfcsensorcomm.mainactivity.HomeScreen;
+import com.xsensio.nfcsensorcomm.mainactivity.MainActivity;
 import com.xsensio.nfcsensorcomm.model.PhoneMcuCommand;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensorCase1;
@@ -48,7 +51,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
 
     private static final String TAG = "SensorCommFragment";
 
-    private SensorCommContract.Presenter mPresenter;
+    public SensorCommContract.Presenter mPresenter;
 
     private Switch mExtendedModeSwitch;
 
@@ -181,6 +184,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
 
         mOperationStatusTv = (TextView) view.findViewById(R.id.read_status_tv);
 
+        ((MainActivity)getActivity()).showHomeScreen();
         return view;
     }
 
@@ -195,13 +199,21 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     }
     @Override
     public void updateSensorResult(List<VirtualSensor> virtualSensors) {
-        mVirtualSensorsRows = virtualSensors;
-        mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
-        mSensorResultsListview.setAdapter(mSensorResultAdapter);
-        //TODO load saved data layer 0
-        // Remove progress bar from display
-        mProgressBar.setVisibility(View.GONE);
-        mProgressBarValueTextview.setVisibility(View.GONE);
+        MainActivity mainActivity=(MainActivity)getActivity();
+        if(mainActivity.ishomescreen){
+            mainActivity.homeScreen.updateSensorResult(virtualSensors);
+            mVirtualSensorsRows = virtualSensors;
+            mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
+            mSensorResultsListview.setAdapter(mSensorResultAdapter);
+            mProgressBar.setVisibility(View.GONE);
+            mProgressBarValueTextview.setVisibility(View.GONE);
+        } else {
+            mVirtualSensorsRows = virtualSensors;
+            mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
+            mSensorResultsListview.setAdapter(mSensorResultAdapter);
+            mProgressBar.setVisibility(View.GONE);
+            mProgressBarValueTextview.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -216,15 +228,21 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
 
     @Override
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBarValueTextview.setVisibility(View.VISIBLE);
-        mProgressBar.setProgress(completionRatio);
-        mProgressBarValueTextview.setText(completionRatio + "% ");
-        mOperationStatusTv.setText(taskDescription);
+        MainActivity mainActivity=(MainActivity)getActivity();
+        if(mainActivity.ishomescreen){
+            mainActivity.homeScreen.updateReadSensorProgress(taskDescription,completionRatio);
+        } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBarValueTextview.setVisibility(View.VISIBLE);
+            mProgressBar.setProgress(completionRatio);
+            mProgressBarValueTextview.setText(completionRatio + "% ");
+            mOperationStatusTv.setText(taskDescription);
+        }
     }
 
     @Override
     public void setReadSensorsButtonEnabled(boolean enabled) {
+        ((MainActivity)getActivity()).homeScreen.setReadSensorsButtonEnabled(enabled);
         mReadSensorsButton.setEnabled(enabled);
     }
 
@@ -279,5 +297,4 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

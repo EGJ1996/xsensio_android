@@ -76,23 +76,6 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
                         e.printStackTrace();
                     }
 
-//                    //SAVING to EXTERNAL
-//                    File external= Environment.getExternalStorageDirectory();
-//                    File myDir=new File(external,"/xsensio");
-//                    if(!myDir.exists()){ myDir.mkdir(); }
-//                    File file=new File(myDir,fileName);
-//                    Gson gson=new Gson();
-//                    String object=gson.toJson(buffer).toString();
-//                    try {
-//                        FileOutputStream fos =  new FileOutputStream(file);
-//                        fos.write(object.getBytes());
-//                        fos.close();
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-
                     int resultCode = 69;
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("sensors", buffer.virtualSensors);

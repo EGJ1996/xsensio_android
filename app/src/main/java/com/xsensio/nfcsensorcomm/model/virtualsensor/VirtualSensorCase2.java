@@ -127,7 +127,7 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
         private double mValueRef;
 
-        private int mEffectiveSamplingFrequency;
+        private double mEffectiveSamplingFrequency;
 
         protected double mDeadbandSize;
 
@@ -137,117 +137,51 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
         private double mAverageMappedData;
 
-        public int[] samplingFrequencies={380,724,1297,2168,3271,6706,13368,27593,56306,83892,112359,169491,1};
-
-        public double freqMCU=0;
-
-        private void setFreqMCU(int currentFreqIdx,int fromMCU){
-            if(currentFreqIdx>11){
-                freqMCU=samplingFrequencies[fromMCU];
-            } else {
-                freqMCU=SignalProcessor.getRightSampleRate(mSamples,currentFreqIdx);
-            }
-            mEffectiveSamplingFrequency=(int)freqMCU/mCommand.getNumSensorsSelected();
-        }
+        public double idealSampleRate;
+        public String sensorName;
         private DataContainer(Context context, CalibrationProfile profile) {
 
             // Load settings
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             int numBitsPerSample = Integer.valueOf(settings.getString("num_bits_per_sample_roc2", context.getString(R.string.num_bits_per_sample_roc2_def_val)));
             mValueRef = Float.valueOf(settings.getString("value_ref_roc2", context.getString(R.string.value_ref_roc2_def_val)));
-            int overallSamplingFrequency = samplingFrequencies[Integer.valueOf(settings.getString("sampling_frequency", context.getString(R.string.sampling_frequency_def_val)))];
+            int sample_freq_idx = Integer.valueOf(settings.getString("sampling_frequency", context.getString(R.string.sampling_frequency_def_val)));
             int numSamplesForDerivative = Integer.valueOf(settings.getString("num_samples_for_derivative", context.getString(R.string.num_samples_for_derivative_def_val)));
             mDeadbandSize = Double.valueOf(settings.getString("deadband_size", context.getString(R.string.deadband_size_def_val)));
             mTimescale = TimescaleEnum.valueOf(settings.getString("graph_time_scale", context.getString(R.string.graph_time_scale_def_val)));
 
             // Compute effective sampling frequency
-            mEffectiveSamplingFrequency = overallSamplingFrequency/mCommand.getNumSensorsSelected();
-            // Group bytes to obtain samples as decimal numbers
             int fromMCU=mReadoutsAsBytes.get(mReadoutsAsBytes.size()-1)>>4;
-            mReadoutsAsBytes=mReadoutsAsBytes.subList(0,mReadoutsAsBytes.size()-2);
-            mSamples = DataUtils.bytesToDecimals(mReadoutsAsBytes, mNumBytesPerSample, numBitsPerSample, mValueRef);
+            List<Byte> dataBytes=mReadoutsAsBytes.subList(0,mReadoutsAsBytes.size()-2);
+            if(sample_freq_idx==12){
+                //frequency from MCU
+                sample_freq_idx=fromMCU;
+            }
+            mEffectiveSamplingFrequency = SignalProcessor.samplingFrequencies[sample_freq_idx]/mCommand.getNumSensorsSelected();
 
-            setFreqMCU(Integer.valueOf(settings.getString("sampling_frequency", context.getString(R.string.sampling_frequency_def_val))),fromMCU);
+            // Group bytes to obtain samples as decimal numbers
+            mSamples = DataUtils.bytesToDecimals(dataBytes, mNumBytesPerSample, numBitsPerSample, mValueRef);
 
-            // Compute derivatives over the samples
-            double samplingPeriod = 1/(double) mEffectiveSamplingFrequency;
-            //List<Double> derivatives = DataUtils.computeDerivatives(mSamples, numSamplesForDerivative, samplingPeriod);
-            List<Double> derivatives = SignalProcessor.derivative(mSamples,samplingPeriod);
-
+            sensorName=getVirtualSensorDefinition().getSensorName();
+            List<Double> derivatives;
+            if(sensorName=="Sensor 3"){
+                //If we are dealing with Sensor 2, then it must be different
+                idealSampleRate=0;
+                derivatives = SignalProcessor.temperatureMapper(mSamples);
+                mAverageDerivative=SignalProcessor.mean(derivatives,false);
+            } else {
+                //Normal Calculation
+                //Calculate Ideal Sample Rate
+                idealSampleRate=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
+                derivatives = SignalProcessor.derivative(mSamples,mEffectiveSamplingFrequency);
+                mAverageDerivative=SignalProcessor.mean(derivatives,true);
+            }
             List<DataPoint> derivativeDatapoints = formDataVsTimeDataPoints(derivatives, mTimescale);
-
-//            List<DataPoint> negativeDeadbandDerivativeDp = getNegativeDeadbandDerivativeDataPoints(derivativeDatapoints);
-//
-//            List<DataPoint> positiveDeadbandDerivativeDp = getPositiveDeadbandDerivativesDataPoints(derivativeDatapoints);
-//
-//            double negativeDeadbandDerivativeAverage = DataPoint.computeAverageOverY(negativeDeadbandDerivativeDp);
-//
-//            double positiveDeadbandDerivativeAverage = DataPoint.computeAverageOverY(positiveDeadbandDerivativeDp);
-
-            mAverageDerivative=SignalProcessor.mean(derivatives);
             mDerivativesDp=new ArrayList<>(derivativeDatapoints);
-//            if (Math.abs(negativeDeadbandDerivativeAverage) < Math.abs(positiveDeadbandDerivativeAverage)) {
-//                mAverageDerivative = negativeDeadbandDerivativeAverage;
-//                mDerivativesDp = new ArrayList<>(negativeDeadbandDerivativeDp);
-//            } else {
-//                mAverageDerivative = positiveDeadbandDerivativeAverage;
-//                mDerivativesDp = new ArrayList<>(positiveDeadbandDerivativeDp);
-//            }
 
-            // Map derivatives to concentration/pH/...
+            // Map derivatives to concentration/pH/... & Compute the average of the mapped data
             mMappedDataDp = computeMappedData(profile, mDerivativesDp);
-
-            // Compute the average of the mapped data
             mAverageMappedData = DataPoint.computeAverageOverY(mMappedDataDp);
-        }
-
-        private List<DataPoint> getNegativeDeadbandDerivativeDataPoints(List<DataPoint> derivativesDp) {
-
-            // Compute the average of negative derivatives
-            double sum = 0;
-            int count = 0;
-            for (DataPoint dp : derivativesDp) {
-                if (dp.getY() < 0) {
-                    count++;
-                    sum += dp.getY();
-                }
-            }
-            double negativeDerivativesAverage = sum / count;
-            Log.d(TAG, "negativeDerivativesAverage = " + negativeDerivativesAverage);
-
-            // Keep derivatives in the range (negativeDerivativesAverage-mDeadbandSize; negativeDerivativesAverage)
-            List<DataPoint> derivativeDataPointsToKeep = new ArrayList<>();
-            for (DataPoint dp : derivativesDp) {
-                if (dp.getY() > (negativeDerivativesAverage-mDeadbandSize) && dp.getY() < negativeDerivativesAverage) {
-                    derivativeDataPointsToKeep.add(dp);
-                }
-            }
-            return derivativeDataPointsToKeep;
-        }
-
-        private List<DataPoint> getPositiveDeadbandDerivativesDataPoints(List<DataPoint> derivativesDp) {
-
-            // Compute the average of positive derivatives
-            double sum = 0;
-            double count = 0;
-            for (DataPoint dp: derivativesDp) {
-                if (dp.getY() > 0) {
-                    count++;
-                    sum += dp.getY();
-                }
-            }
-            double positiveDerivativesAverage = sum / count;
-            Log.d(TAG, "positiveDerivativesAverage = " + positiveDerivativesAverage);
-
-            // Keep derivatives in the range (positiveDerivativesAverage; positiveDerivativesAverage+mDeadbandSize)
-            List<DataPoint> derivativeDataPointsToKeep = new ArrayList<>();
-            for (DataPoint dp : derivativesDp) {
-                if (dp.getY() > positiveDerivativesAverage && dp.getY() < (positiveDerivativesAverage+mDeadbandSize)) {
-                    derivativeDataPointsToKeep.add(dp);
-                }
-            }
-
-            return derivativeDataPointsToKeep;
         }
 
         private List<DataPoint> computeMappedData(CalibrationProfile profile, List<DataPoint> valuesToMap) {
