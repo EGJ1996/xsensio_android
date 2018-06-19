@@ -28,19 +28,23 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginRight="10pt"
-                android:layout_marginLeft="10pt">
+                android:layout_marginRight="5pt"
+                android:layout_marginLeft="5pt">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sensor 1"
                     android:gravity="center"
-                    android:textSize="9pt"/>
+                    android:textSize="9pt"
+                    android:textStyle="bold"
+                    android:id="@+id/hm_sensor1_label"/>
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Value"
+                    android:textSize="5pt"
                     android:editable="false"
                     android:id="@+id/hm_sensor1_val"/>
                 <ProgressBar
@@ -58,21 +62,24 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginRight="10pt"
-                android:layout_marginLeft="10pt">
+                android:layout_marginRight="5pt"
+                android:layout_marginLeft="5pt">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sensor 2"
                     android:gravity="center"
-                    android:textSize="9pt"/>
+                    android:textSize="9pt"
+                    android:textStyle="bold"
+                    android:id="@+id/hm_sensor2_label"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Value"
                     android:editable="false"
-                    android:id="@+id/hm_sensor2_val"/>
+                    android:id="@+id/hm_sensor2_val"
+                    android:textSize="5pt"/>
                 <ProgressBar
                     android:id="@+id/hm_sensor2_prog"
                     style="@android:style/Widget.ProgressBar.Horizontal"
@@ -88,19 +95,22 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginRight="10pt"
-                android:layout_marginLeft="10pt">
+                android:layout_marginRight="5pt"
+                android:layout_marginLeft="5pt">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sensor 3"
                     android:gravity="center"
-                    android:textSize="9pt"/>
+                    android:textSize="9pt"
+                    android:textStyle="bold"
+                    android:id="@+id/hm_sensor3_label"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Value"
+                    android:textSize="5pt"
                     android:editable="false"
                     android:id="@+id/hm_sensor3_val"/>
                 <ProgressBar

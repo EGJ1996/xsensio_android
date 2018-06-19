@@ -200,20 +200,12 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     @Override
     public void updateSensorResult(List<VirtualSensor> virtualSensors) {
         MainActivity mainActivity=(MainActivity)getActivity();
-        if(mainActivity.ishomescreen){
-            mainActivity.homeScreen.updateSensorResult(virtualSensors);
-            mVirtualSensorsRows = virtualSensors;
-            mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
-            mSensorResultsListview.setAdapter(mSensorResultAdapter);
-            mProgressBar.setVisibility(View.GONE);
-            mProgressBarValueTextview.setVisibility(View.GONE);
-        } else {
-            mVirtualSensorsRows = virtualSensors;
-            mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
-            mSensorResultsListview.setAdapter(mSensorResultAdapter);
-            mProgressBar.setVisibility(View.GONE);
-            mProgressBarValueTextview.setVisibility(View.GONE);
-        }
+        mainActivity.homeScreen.updateSensorResult(virtualSensors);
+        mVirtualSensorsRows = virtualSensors;
+        mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
+        mSensorResultsListview.setAdapter(mSensorResultAdapter);
+        mProgressBar.setVisibility(View.GONE);
+        mProgressBarValueTextview.setVisibility(View.GONE);
     }
 
     @Override

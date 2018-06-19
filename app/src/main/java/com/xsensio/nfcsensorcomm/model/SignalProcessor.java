@@ -50,6 +50,7 @@ public final class SignalProcessor {
         double total=0;
         int cnt=0;
         for (Double value : values) {
+            if(Double.isInfinite(value) || Double.isNaN(value)){ continue;}
             if(onlyPositive){
                 if(value>meanzeroThresh){
                     total+=value;
@@ -76,7 +77,7 @@ public final class SignalProcessor {
     private static int dt=50;
     private static int length=5;
     private static double thresh=0.002;
-    private static double scaler=119.97;
+    private static double scaler=0.130;//119.97;
     public static List<Double> derivative(List<Double> mSamples,double mEffectiveSamplingFrequency){
         int ls=mSamples.size();
         double[] forward=new double[ls+dt];

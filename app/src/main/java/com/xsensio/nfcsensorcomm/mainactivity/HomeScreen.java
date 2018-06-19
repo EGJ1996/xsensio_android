@@ -2,6 +2,7 @@ package com.xsensio.nfcsensorcomm.mainactivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xsensio.nfcsensorcomm.R;
@@ -23,6 +25,9 @@ import com.xsensio.nfcsensorcomm.model.CalibrationProfile;
 import com.xsensio.nfcsensorcomm.model.PhoneMcuCommand;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensorCase2;
+import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensorDefinitionCase2;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -46,6 +51,8 @@ public class HomeScreen extends Fragment{
 
     private Button mReadSensorsButton;
     private EditText[] sensorVals=new EditText[3];
+    private TextView[] sensorNames=new TextView[3];
+    private boolean[] sensorAccess={true,true,true};
     private ProgressBar[] sensorProgs=new ProgressBar[3];
 
     @Override
@@ -80,9 +87,9 @@ public class HomeScreen extends Fragment{
 
                 PhoneMcuCommand command = new PhoneMcuCommand(
                         getActivity().getApplicationContext(),
-                        true,
-                        true,
-                        true,
+                        sensorAccess[0],
+                        sensorAccess[1],
+                        sensorAccess[2],
                         false,
                         numSamplesReadoutsCase1,
                         numSamplesReadoutsCase2,
@@ -96,9 +103,46 @@ public class HomeScreen extends Fragment{
             }
         });
 
+        sensorNames[0]=(TextView)view.findViewById(R.id.hm_sensor1_label);
+        sensorNames[1]=(TextView)view.findViewById(R.id.hm_sensor2_label);
+        sensorNames[2]=(TextView)view.findViewById(R.id.hm_sensor3_label);
+
         sensorVals[0]=(EditText)view.findViewById(R.id.hm_sensor1_val);
         sensorVals[1]=(EditText)view.findViewById(R.id.hm_sensor2_val);
         sensorVals[2]=(EditText)view.findViewById(R.id.hm_sensor3_val);
+        sensorNames[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorAccess[0]= !sensorAccess[0];
+                if(sensorAccess[0]){
+                    sensorNames[0].setTypeface(null, Typeface.BOLD);
+                } else {
+                    sensorNames[0].setTypeface(null, Typeface.NORMAL);
+                }
+            }
+        });
+        sensorNames[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorAccess[1]= !sensorAccess[1];
+                if(sensorAccess[1]){
+                    sensorNames[1].setTypeface(null, Typeface.BOLD);
+                } else {
+                    sensorNames[1].setTypeface(null, Typeface.NORMAL);
+                }
+            }
+        });
+        sensorNames[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorAccess[2]= !sensorAccess[2];
+                if(sensorAccess[2]){
+                    sensorNames[2].setTypeface(null, Typeface.BOLD);
+                } else {
+                    sensorNames[2].setTypeface(null, Typeface.NORMAL);
+                }
+            }
+        });
 
         sensorProgs[0]=(ProgressBar)view.findViewById(R.id.hm_sensor1_prog);
         sensorProgs[1]=(ProgressBar)view.findViewById(R.id.hm_sensor2_prog);
@@ -131,16 +175,21 @@ public class HomeScreen extends Fragment{
     }
 
     public void updateSensorResult(List<VirtualSensor> sensorResults) {
-        for (int i = 0; i < sensorResults.size(); i++) {
-            VirtualSensorCase2 sensor=(VirtualSensorCase2) sensorResults.get(i);
-            VirtualSensorCase2.DataContainer data=sensor.getDataContainer(getContext(),null);
-            NumberFormat formatter = new DecimalFormat("0.###E0");
-            String average = formatter.format(data.getAverageDerivative());
-            average=average.replace("E","*10^");
-            sensorVals[i].setText(average);
-        }
-        for (int i=sensorResults.size();i<3;i++){
-            sensorVals[i].setText(Double.toString(0));
+        if(sensorResults.size()==0){
+            for (int i=sensorResults.size();i<3;i++){
+                sensorVals[i].setText(Double.toString(0));
+            }
+        } else {
+            for (int i = 0; i < sensorResults.size(); i++) {
+                VirtualSensorCase2 sensor = (VirtualSensorCase2) sensorResults.get(i);
+                VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), null);
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                String average = formatter.format(data.getAverageDerivative());
+                VirtualSensorDefinitionCase2 definitionCase2 = (VirtualSensorDefinitionCase2) sensor.getVirtualSensorDefinition();
+                average = average.replace("E", "*10^") + definitionCase2.getDerivativesPlotMetadata().getYAxisUnitLabel();
+                int sensorNumber = Integer.valueOf(definitionCase2.getSensorName().replace("Sensor ",""))-1;
+                sensorVals[sensorNumber].setText(average);
+            }
         }
     }
 
