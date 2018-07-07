@@ -254,7 +254,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
         new XYPlotWrapper(mMappedDataVsTimePlot, plotMetadata, datapoints);
 
         String averageMappedDataAsString = String.format ("%.5f", Math.pow(10,dataContainer.getAverageMappedData()));
-        mAverageMappedDataTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageMappedDataAsString+virtualSensorDefinition.getMappedDataPlotMetadata().getYAxisUnitLabel());
+        mAverageMappedDataTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageMappedDataAsString+"(mol/l)");
     }
 
     private CalibrationProfile getSelectedCalibrationProfile() {
