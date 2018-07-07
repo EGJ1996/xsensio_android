@@ -183,28 +183,22 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
             // Map derivatives to concentration/pH/... & Compute the average of the mapped data
             mMappedDataDp = computeMappedData(profile, mDerivativesDp);
 //            mAverageMappedData = DataPoint.computeAverageOverY(mMappedDataDp);
-            mAverageMappedData = computeAverageDataLog(profile,mSamples);
+            mAverageMappedData = computeAverageDataLog(profile,mAverageDerivative);
         }
 
-        private double computeAverageDataLog(CalibrationProfile profile, List<Double> values){
+        private double computeAverageDataLog(CalibrationProfile profile, Double value){
             if (profile == null) {
                 return 0;
             }
 
-            List<DataPoint> mappedDataPoints = new ArrayList<>();
-            double sum=0;
             FunctionEstimator functionEstimator = new LinearFunctionEstimator(profile.getRefReadoutVsOutputMapping());
-            for (Double dp : values) {
-                // Apply mapping
-                double mappedValue = functionEstimator.getEstimate(dp);
+            // Apply mapping
+            double mappedValue = functionEstimator.getEstimate(value);
 
-                // Apply sensor-dependent function on every mapped data
-                mappedValue = applyFunctionOnMappedData(mappedValue);
+            // Apply sensor-dependent function on every mapped data
+            mappedValue = applyFunctionOnMappedData(mappedValue);
 
-                sum+=mappedValue;
-            }
-
-            return Math.log10(sum/(double)values.size());
+            return Math.log10(mappedValue);
         }
 
         private List<DataPoint> computeMappedData(CalibrationProfile profile, List<DataPoint> valuesToMap) {

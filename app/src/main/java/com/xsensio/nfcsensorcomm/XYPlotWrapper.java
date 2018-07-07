@@ -52,8 +52,10 @@ public class XYPlotWrapper {
 
         if (dataPoints.size() >= 1) {
             DataPoint dp = dataPoints.get(0);
-            mAreXValuesNegative = dp.getX() < 0;
-            mAreYValuesNegative = dp.getY() < 0;
+            //mAreXValuesNegative = dp.getX() < 0;
+            //mAreYValuesNegative = dp.getY() < 0;
+            mAreXValuesNegative = false;
+            mAreYValuesNegative = false;
         } else {
             mAreXValuesNegative = false;
             mAreYValuesNegative = false;
@@ -234,9 +236,9 @@ public class XYPlotWrapper {
                         if (ordinateValue > 0) {
                             numberAsString = "-" + numberAsString;
                         }
-                        numberAsString = "-10^" + numberAsString;
+                        numberAsString = "-" + numberAsString;
                     } else {
-                        numberAsString = "10^" + formatter.format(ordinateValue);
+                        numberAsString = "" + formatter.format(ordinateValue);
                     }
                 } else {
                     numberAsString = formatter.format(ordinateValue);

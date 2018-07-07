@@ -212,13 +212,16 @@ public class HomeScreen extends Fragment{
                 String average="";
                 if(sensorNumber==2){
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), null);
-                    average=Double.toString(data.getAverageDerivative());
+                    NumberFormat formatter = new DecimalFormat("###.###");
+                    average =  formatter.format(data.getAverageDerivative());
+                    average+="°C";
                 } else {
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
                     NumberFormat formatter = new DecimalFormat("###.###");
-                    average =  formatter.format(data.getAverageMappedData());
+                    average =  formatter.format(-data.getAverageMappedData());
+                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
                 }
-                average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
+
                 sensorVals[sensorNumber].setText(average);
             }
         }
