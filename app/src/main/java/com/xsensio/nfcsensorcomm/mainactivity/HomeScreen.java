@@ -216,9 +216,9 @@ public class HomeScreen extends Fragment{
                 } else {
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
                     NumberFormat formatter = new DecimalFormat("###.###");
-                    average =  "10^"+formatter.format(data.getAverageMappedData());
+                    average =  formatter.format(data.getAverageMappedData());
                 }
-                average = average + definitionCase2.getCalibrationPlotMetadata().getYAxisUnitLabel();
+                average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
                 sensorVals[sensorNumber].setText(average);
             }
         }

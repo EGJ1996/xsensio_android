@@ -151,7 +151,6 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
             mTimescale = TimescaleEnum.valueOf(settings.getString("graph_time_scale", context.getString(R.string.graph_time_scale_def_val)));
 
             // Compute effective sampling frequency
-            // Note we can also get frequency value from MCU (Ask Junrui about last slot of frequency selection)
             int fromMCU=mReadoutsAsBytes.get(mReadoutsAsBytes.size()-1)>>4;
             List<Byte> dataBytes=mReadoutsAsBytes.subList(0,mReadoutsAsBytes.size()-2);
             if(sample_freq_idx==12){
@@ -166,15 +165,15 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
             sensorName=getVirtualSensorDefinition().getSensorName();
             List<Double> derivatives;
             if(sensorName=="Sensor 3"){
-                //If we are dealing with Sensor , then we have to perform temperature calculations
+                //If we are dealing with Sensor 2, then it must be different
                 idealSampleRate=0;
                 derivatives = SignalProcessor.temperatureMapper(mSamples);
                 mAverageDerivative=SignalProcessor.mean(derivatives,false);
             } else {
                 //Normal Calculation
                 //Calculate Ideal Sample Rate
-                double calculatedidealSampleRate=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
-                idealSampleRate=SignalProcessor.closest(calculatedidealSampleRate);
+                double calc=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
+                idealSampleRate=SignalProcessor.closest(calc);
                 derivatives = SignalProcessor.derivative(mSamples,mEffectiveSamplingFrequency);
                 mAverageDerivative=SignalProcessor.mean(derivatives,true);
             }
@@ -183,7 +182,29 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
             // Map derivatives to concentration/pH/... & Compute the average of the mapped data
             mMappedDataDp = computeMappedData(profile, mDerivativesDp);
-            mAverageMappedData = DataPoint.computeAverageOverY(mMappedDataDp);
+//            mAverageMappedData = DataPoint.computeAverageOverY(mMappedDataDp);
+            mAverageMappedData = computeAverageDataLog(profile,mSamples);
+        }
+
+        private double computeAverageDataLog(CalibrationProfile profile, List<Double> values){
+            if (profile == null) {
+                return 0;
+            }
+
+            List<DataPoint> mappedDataPoints = new ArrayList<>();
+            double sum=0;
+            FunctionEstimator functionEstimator = new LinearFunctionEstimator(profile.getRefReadoutVsOutputMapping());
+            for (Double dp : values) {
+                // Apply mapping
+                double mappedValue = functionEstimator.getEstimate(dp);
+
+                // Apply sensor-dependent function on every mapped data
+                mappedValue = applyFunctionOnMappedData(mappedValue);
+
+                sum+=mappedValue;
+            }
+
+            return Math.log10(sum/(double)values.size());
         }
 
         private List<DataPoint> computeMappedData(CalibrationProfile profile, List<DataPoint> valuesToMap) {

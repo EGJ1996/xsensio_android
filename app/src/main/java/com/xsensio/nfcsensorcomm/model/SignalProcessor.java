@@ -149,7 +149,7 @@ public final class SignalProcessor {
     public static int closest(double frequency){
         double min_diff=99999999;
         int min_i=0;
-        for (int i = 0; i < samplingFrequencies.length; i++) {
+        for (int i = 0; i < samplingFrequencies.length-1; i++) {
             double diff=Math.abs(samplingFrequencies[i]-frequency);
             if(min_diff>diff){
                 min_diff=diff;
