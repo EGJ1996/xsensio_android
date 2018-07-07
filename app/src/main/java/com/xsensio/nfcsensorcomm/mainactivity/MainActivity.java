@@ -48,6 +48,13 @@ import com.xsensio.nfcsensorcomm.mainactivity.tagconfiguration.NfcTagConfigurati
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO there is strange bug happening in NFC communication
+// If we disrupt the communication while it's reading from tag, next time the reading process didn't stop at all
+// unless we restart nfc tag and app or just reinstall the app to the phone.  /Bilguun/
+// The main method of this communication depends on broadcasting data and receiving. For example if you want to read tag
+// this code will just broadcast the command, and handlers will read data from tag and broadcast it back. I tried to fix the above
+// error but failed miserably. The initial method is somewhat vague and perhaps dangerous to modify. So proceed with care :)
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View,HomeScreen.OnFragmentInteractionListener {
 
     private static final String TAG = "MyActivity";

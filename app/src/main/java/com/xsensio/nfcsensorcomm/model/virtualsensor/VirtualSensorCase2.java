@@ -137,7 +137,7 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
         private double mAverageMappedData;
 
-        public double idealSampleRate;
+        public int idealSampleRate;
         public String sensorName;
         private DataContainer(Context context, CalibrationProfile profile) {
 
@@ -151,6 +151,7 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
             mTimescale = TimescaleEnum.valueOf(settings.getString("graph_time_scale", context.getString(R.string.graph_time_scale_def_val)));
 
             // Compute effective sampling frequency
+            // Note we can also get frequency value from MCU (Ask Junrui about last slot of frequency selection)
             int fromMCU=mReadoutsAsBytes.get(mReadoutsAsBytes.size()-1)>>4;
             List<Byte> dataBytes=mReadoutsAsBytes.subList(0,mReadoutsAsBytes.size()-2);
             if(sample_freq_idx==12){
@@ -165,14 +166,15 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
             sensorName=getVirtualSensorDefinition().getSensorName();
             List<Double> derivatives;
             if(sensorName=="Sensor 3"){
-                //If we are dealing with Sensor 2, then it must be different
+                //If we are dealing with Sensor , then we have to perform temperature calculations
                 idealSampleRate=0;
                 derivatives = SignalProcessor.temperatureMapper(mSamples);
                 mAverageDerivative=SignalProcessor.mean(derivatives,false);
             } else {
                 //Normal Calculation
                 //Calculate Ideal Sample Rate
-                idealSampleRate=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
+                double calculatedidealSampleRate=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
+                idealSampleRate=SignalProcessor.closest(calculatedidealSampleRate);
                 derivatives = SignalProcessor.derivative(mSamples,mEffectiveSamplingFrequency);
                 mAverageDerivative=SignalProcessor.mean(derivatives,true);
             }

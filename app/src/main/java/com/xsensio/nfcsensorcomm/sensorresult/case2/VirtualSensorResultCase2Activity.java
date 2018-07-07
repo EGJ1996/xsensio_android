@@ -69,7 +69,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
 
     private TextView mIdealFrequency;
     private Button mSetFrequency;
-    private double idealFreq;
+    private int idealFreq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
             public void onClick(View v) {
                 SharedPreferences settings=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor=settings.edit();
-                int verifiedFrequency= SignalProcessor.closest(idealFreq); //TODO verify frequency
+                int verifiedFrequency= idealFreq; //TODO verify frequency
                 String tmp=settings.getString("sampling_frequency","SEXYINEES");
                 editor.putString("sampling_frequency",Integer.toString(verifiedFrequency));
                 editor.commit();
@@ -152,7 +152,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
         //savetheshit(dataContainer);
         final VirtualSensorDefinitionCase2 virtualSensorDefinition = (VirtualSensorDefinitionCase2) virtualSensor.getVirtualSensorDefinition();
 
-        mIdealFrequency.setText(Integer.toString((int)dataContainer.idealSampleRate/1000)+"KHz");
+        mIdealFrequency.setText(Double.toString(SignalProcessor.samplingFrequencies[dataContainer.idealSampleRate]/1000)+"KHz");
         idealFreq=dataContainer.idealSampleRate;
         // Render plots
         renderSamplesVsTimePlot(virtualSensorDefinition, dataContainer);
@@ -163,6 +163,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
             renderMappedDataVsTimePlot(virtualSensorDefinition, dataContainer);
         }
     }
+
 
     private void refreshCalibrationProfileSpinner() {
         // Load calibration profiles
@@ -208,9 +209,8 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
 
         new XYPlotWrapper(mDerivativesVsTimePlot, plotMetadata, datapoints);
 
-        NumberFormat formatter = new DecimalFormat("0.###E0");
+        NumberFormat formatter = new DecimalFormat("00.##E0");
         String averageDerivativeAsString = formatter.format(dataContainer.getAverageDerivative());
-        averageDerivativeAsString=averageDerivativeAsString.replace("E","*10^");
         mAverageDerivativeTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageDerivativeAsString+virtualSensorDefinition.getDerivativesPlotMetadata().getYAxisUnitLabel());
     }
 
@@ -253,9 +253,7 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
 
         new XYPlotWrapper(mMappedDataVsTimePlot, plotMetadata, datapoints);
 
-        NumberFormat formatter = new DecimalFormat("0.###E0");
-        String averageMappedDataAsString = formatter.format(dataContainer.getAverageMappedData());
-        averageMappedDataAsString=averageMappedDataAsString.replace("E","*10^");
+        String averageMappedDataAsString = "10^"+Double.toString(dataContainer.getAverageMappedData());
         mAverageMappedDataTv.setText("Average " + plotMetadata.getYAxisLabel() + ": " + averageMappedDataAsString+virtualSensorDefinition.getDerivativesPlotMetadata().getYAxisUnitLabel());
     }
 

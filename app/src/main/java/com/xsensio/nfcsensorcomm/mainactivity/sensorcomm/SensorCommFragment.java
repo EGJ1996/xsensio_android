@@ -200,6 +200,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     @Override
     public void updateSensorResult(List<VirtualSensor> virtualSensors) {
         MainActivity mainActivity=(MainActivity)getActivity();
+        //This line is to communicate to homescreen fragment
         mainActivity.homeScreen.updateSensorResult(virtualSensors);
         mVirtualSensorsRows = virtualSensors;
         mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
