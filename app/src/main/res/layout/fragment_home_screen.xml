@@ -29,164 +29,6 @@
             />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.6">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/hm_sensor1_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:text="pH"
-                    android:textSize="8pt"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/hm_sensor2_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:text="Na+"
-                    android:textSize="8pt"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/hm_sensor3_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:text="Skin Temperature"
-                    android:textSize="8pt"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.5"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5pt"
-                android:layout_marginRight="5pt"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-
-                <EditText
-                    android:id="@+id/hm_sensor1_val"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Value"
-                    android:textSize="5pt" />
-
-                <ProgressBar
-                    android:id="@+id/hm_sensor1_prog"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"></ProgressBar>
-
-                <Spinner
-                    android:id="@+id/hm_spinner1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></Spinner>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5pt"
-                android:layout_marginRight="5pt"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/hm_sensor2_val"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Value"
-                    android:textSize="5pt" />
-
-                <ProgressBar
-                    android:id="@+id/hm_sensor2_prog"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"></ProgressBar>
-
-                <Spinner
-                    android:id="@+id/hm_spinner2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></Spinner>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5pt"
-                android:layout_marginRight="5pt"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/hm_sensor3_val"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint="Value"
-                    android:textSize="5pt" />
-
-                <ProgressBar
-                    android:id="@+id/hm_sensor3_prog"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"></ProgressBar>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="9pt" />
-            </LinearLayout>
-
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -200,21 +42,27 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/hm_read"
+                    android:id="@+id/hm_calibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="calibrate" />
+                <Button
+                    android:id="@+id/hm_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="history" />
+                <Button
+                    android:id="@+id/hm_readSensors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="read sensors" />
+                <Button
+                    android:id="@+id/hm_oldInterface"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="old" />
 
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/hm_more"
-                android:layout_width="20pt"
-                android:layout_height="20pt"
-                android:layout_gravity="right"
-                android:layout_marginRight="10pt"
-                android:layout_marginBottom="5pt"
-                android:src="@drawable/input_grey_192x192" />
 
         </LinearLayout>
 

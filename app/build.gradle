@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.android.gms:play-services-plus:16.0.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -33,4 +34,5 @@ dependencies {
     implementation 'com.moandjiezana.toml:toml4j:0.7.1'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
 }

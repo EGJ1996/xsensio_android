@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
+import com.google.gson.Gson;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationActivity;
 import com.xsensio.nfcsensorcomm.files.FileManagerActivity;
@@ -41,10 +43,19 @@ import com.xsensio.nfcsensorcomm.mainactivity.phonetagcomm.PhoneTagCommPresenter
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommContract;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommFragment;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommPresenter;
+import com.xsensio.nfcsensorcomm.model.ReducedMeasurement;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 import com.xsensio.nfcsensorcomm.settings.SettingsActivity;
 import com.xsensio.nfcsensorcomm.mainactivity.tagconfiguration.NfcTagConfigurationPresenter;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +74,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private FrameLayout mHomeScreen;
+    private android.support.v4.app.FragmentTransaction fragmentTransaction;
     public HomeScreen homeScreen=new HomeScreen();
+    public LoadingScreen loadingScreen= new LoadingScreen();
+    public DataHistoryScreen historyScreen= new DataHistoryScreen();
+    public ResultScreen resultScreen= new ResultScreen();
 
     private NfcAdapter mNfcAdapter;
     private PendingIntent mPendingIntent;
@@ -108,10 +123,92 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mPendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-        mHomeScreen=(FrameLayout) findViewById(R.id.home_screen_container);
-        android.support.v4.app.FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.home_screen_container,homeScreen);
+        mHomeScreen=findViewById(R.id.home_screen_container);
+        fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        changeFragment("homeScreen");
+    }
+
+    public void changeFragment(String tag){
+        switch (tag){
+            case "homeScreen":
+                fragmentTransaction.add(R.id.home_screen_container,homeScreen);
+                break;
+            case "loadingScreen":
+                fragmentTransaction.add(R.id.home_screen_container,loadingScreen);
+                break;
+            case "resultScreen":
+                fragmentTransaction.add(R.id.home_screen_container,resultScreen);
+                break;
+            case "historyScreen":
+                fragmentTransaction.add(R.id.home_screen_container,historyScreen);
+                break;
+        }
         fragmentTransaction.commit();
+    }
+
+    public void addMeasurement(ReducedMeasurement measurement){
+        //SAVING to EXTERNAL
+        File external= Environment.getExternalStorageDirectory();
+        File myDir=new File(external,"/xsensio");
+        if(!myDir.exists()){
+            myDir.mkdir(); }
+        File file=new File(myDir,"measurements.csv");
+        if(!file.exists()){
+            String object="date,ph,sodium,temperature\n";
+            try {
+                FileOutputStream fos =  new FileOutputStream(file);
+                fos.write(object.getBytes());
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileWriter fw = new FileWriter(file,true); //the true will append the new data
+            fw.write(measurement.toString());//appends the string to the file
+            fw.close();
+        } catch(IOException ioe) {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+    }
+
+    public void clearMeasurements(){
+        File external= Environment.getExternalStorageDirectory();
+        File myDir=new File(external,"/xsensio");
+        if(!myDir.exists()){
+            myDir.mkdir(); }
+        File file=new File(myDir,"measurements.csv");
+        if(!file.exists()){
+            file.delete();
+        }
+    }
+
+    public ArrayList<ReducedMeasurement> getMeasurements(){
+        ArrayList<ReducedMeasurement> results=new ArrayList<>();
+        File external= Environment.getExternalStorageDirectory();
+        File myDir=new File(external,"/xsensio");
+        if(!myDir.exists()){
+            return null; }
+        File file=new File(myDir,"measurements.csv");
+        if(!file.exists()){
+            return null;
+        }
+        boolean isHeader=true;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                if(isHeader){
+                    isHeader=false;
+                } else {
+                    results.add(new ReducedMeasurement(sCurrentLine));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
     public void showHomeScreen(){

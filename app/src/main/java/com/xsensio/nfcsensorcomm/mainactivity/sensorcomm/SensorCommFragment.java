@@ -201,7 +201,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     public void updateSensorResult(List<VirtualSensor> virtualSensors) {
         MainActivity mainActivity=(MainActivity)getActivity();
         //This line is to communicate to homescreen fragment
-        mainActivity.homeScreen.updateSensorResult(virtualSensors);
+        mainActivity.resultScreen.updateSensorResult(virtualSensors);
         mVirtualSensorsRows = virtualSensors;
         mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
         mSensorResultsListview.setAdapter(mSensorResultAdapter);
@@ -223,7 +223,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
         MainActivity mainActivity=(MainActivity)getActivity();
         if(mainActivity.ishomescreen){
-            mainActivity.homeScreen.updateReadSensorProgress(taskDescription,completionRatio);
+            mainActivity.loadingScreen.updateReadSensorProgress(taskDescription,completionRatio);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
             mProgressBarValueTextview.setVisibility(View.VISIBLE);
