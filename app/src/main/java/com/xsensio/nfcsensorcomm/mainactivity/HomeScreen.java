@@ -211,11 +211,23 @@ public class HomeScreen extends Fragment{
                 int sensorNumber = Integer.valueOf(definitionCase2.getSensorName().replace("Sensor ",""))-1;
                 String average="";
                 if(sensorNumber==2){
+                    //Todo 1: in order to display temperature instead of K+ concentration, 1st step: uncomment these 4 lines, and comment the following 4 lines, by junrui
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), null);
                     NumberFormat formatter = new DecimalFormat("###.###");
                     average =  formatter.format(data.getAverageDerivative());
                     average+="°C";
+//                    VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
+//                    NumberFormat formatter = new DecimalFormat("###.###");
+//                    average =  formatter.format(Math.pow(10,data.getAverageMappedData())*1000);
+//                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
+                } else if(sensorNumber==1){
+                    //sensorNumber==1, display as concentration, by junrui
+                    VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
+                    NumberFormat formatter = new DecimalFormat("###.###");
+                    average =  formatter.format(Math.pow(10,data.getAverageMappedData())*1000);
+                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
                 } else {
+                    //sensorNumber==0, display as pH, by junrui
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
                     NumberFormat formatter = new DecimalFormat("###.###");
                     average =  formatter.format(-data.getAverageMappedData());
@@ -326,4 +338,6 @@ public class HomeScreen extends Fragment{
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

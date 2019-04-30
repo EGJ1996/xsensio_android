@@ -309,4 +309,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             sensorCommFragment.updateSensorResult(result);
         }
     }
+
 }

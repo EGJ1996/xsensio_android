@@ -157,6 +157,8 @@ public class VirtualSensorResultCase2Activity extends AppCompatActivity implemen
         // Render plots
         renderSamplesVsTimePlot(virtualSensorDefinition, dataContainer);
         renderDerivativesVsTimePlot(virtualSensorDefinition, dataContainer);
+        //Todo 3: in order to display temperature in sensor 3, set the following if condition to "sensor 3", by junrui
+        //Todo 4: in order to display concentration in sensor 3, there is still steps missing causing crash of app
         if(dataContainer.sensorName=="Sensor 3"){
             mMappedDataVsTimePlot.setVisibility(View.INVISIBLE);
         } else {

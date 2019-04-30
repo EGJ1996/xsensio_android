@@ -164,6 +164,7 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
             sensorName=getVirtualSensorDefinition().getSensorName();
             List<Double> derivatives;
+            //Todo 2: in order to display temperature in sensor 3, change the following to if (sensorName=="sensor 3"), by junrui
             if(sensorName=="Sensor 3"){
                 //If we are dealing with Sensor 2, then it must be different
                 idealSampleRate=0;

@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xsensio.nfcsensorcomm.mainactivity.HomeScreen"
-    >
+    tools:context="com.xsensio.nfcsensorcomm.mainactivity.HomeScreen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,127 +12,177 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:src="@drawable/xsensio770x308"/>
+            android:layout_weight="1.8"
+            android:src="@drawable/xsensio770x308" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_weight="2.5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6pt"
+                android:text="Lab on skin sensing results"
+                android:textSize="9pt" />
+            />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.6">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginRight="5pt"
-                android:layout_marginLeft="5pt">
+                android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/hm_sensor1_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sensor 1"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:textSize="9pt"
-                    android:textStyle="bold"
-                    android:id="@+id/hm_sensor1_label"/>
+                    android:text="pH"
+                    android:textSize="8pt"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/hm_sensor2_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="Na+"
+                    android:textSize="8pt"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/hm_sensor3_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="Skin Temperature"
+                    android:textSize="8pt"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5pt"
+                android:layout_marginRight="5pt"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
 
                 <EditText
+                    android:id="@+id/hm_sensor1_val"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Value"
-                    android:textSize="5pt"
                     android:editable="false"
-                    android:id="@+id/hm_sensor1_val"/>
+                    android:hint="Value"
+                    android:textSize="5pt" />
+
                 <ProgressBar
                     android:id="@+id/hm_sensor1_prog"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-                </ProgressBar>
+                    android:layout_gravity="center"></ProgressBar>
 
                 <Spinner
+                    android:id="@+id/hm_spinner1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hm_spinner1"></Spinner>
+                    android:layout_height="wrap_content"></Spinner>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_marginLeft="5pt"
                 android:layout_marginRight="5pt"
-                android:layout_marginLeft="5pt">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sensor 2"
-                    android:gravity="center"
-                    android:textSize="9pt"
-                    android:textStyle="bold"
-                    android:id="@+id/hm_sensor2_label"/>
                 <EditText
+                    android:id="@+id/hm_sensor2_val"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Value"
                     android:editable="false"
-                    android:id="@+id/hm_sensor2_val"
-                    android:textSize="5pt"/>
+                    android:hint="Value"
+                    android:textSize="5pt" />
+
                 <ProgressBar
                     android:id="@+id/hm_sensor2_prog"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-                </ProgressBar>
+                    android:layout_gravity="center"></ProgressBar>
 
                 <Spinner
+                    android:id="@+id/hm_spinner2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hm_spinner2"></Spinner>
+                    android:layout_height="wrap_content"></Spinner>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_marginLeft="5pt"
                 android:layout_marginRight="5pt"
-                android:layout_marginLeft="5pt">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Sensor 3"
-                    android:gravity="center"
-                    android:textSize="9pt"
-                    android:textStyle="bold"
-                    android:id="@+id/hm_sensor3_label"/>
                 <EditText
+                    android:id="@+id/hm_sensor3_val"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Value"
-                    android:textSize="5pt"
                     android:editable="false"
-                    android:id="@+id/hm_sensor3_val"/>
+                    android:hint="Value"
+                    android:textSize="5pt" />
+
                 <ProgressBar
                     android:id="@+id/hm_sensor3_prog"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-                </ProgressBar>
+                    android:layout_gravity="center"></ProgressBar>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="9pt"/>
+                    android:textSize="9pt" />
             </LinearLayout>
 
         </LinearLayout>
@@ -151,21 +200,21 @@
                 android:gravity="center">
 
                 <Button
+                    android:id="@+id/hm_read"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="read sensors"
-                    android:id="@+id/hm_read" />
+                    android:text="read sensors" />
 
             </LinearLayout>
 
             <ImageView
-                android:layout_gravity="right"
+                android:id="@+id/hm_more"
                 android:layout_width="20pt"
                 android:layout_height="20pt"
+                android:layout_gravity="right"
                 android:layout_marginRight="10pt"
                 android:layout_marginBottom="5pt"
-                android:src="@drawable/input_grey_192x192"
-                android:id="@+id/hm_more"/>
+                android:src="@drawable/input_grey_192x192" />
 
         </LinearLayout>
 
