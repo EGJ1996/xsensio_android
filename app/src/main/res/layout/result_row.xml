@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress"
+        android:layout_width="307dp"
+        android:layout_height="244dp"
+        android:background="@color/white"
+        app:arc_angle="120"
+        app:arc_bottom_text="Temperature"
+        app:arc_bottom_text_size="36dp"
+        app:arc_finished_color="@color/colorPrimary"
+        app:arc_unfinished_color="@color/colorSecondary"
+        app:arc_progress="10"
+        app:arc_stroke_width="20dp"
+        app:arc_suffix_text="C"
+        app:arc_text_color="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
+        android:text="Temperature"
+        android:textSize="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sad"
+        android:textSize="36dp"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="400dp"
+        app:showOutline="true"
+        app:bootstrapBrand="success"
+        app:roundedCorners="true"/>
+
+</android.support.constraint.ConstraintLayout>

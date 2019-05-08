@@ -68,4 +68,14 @@ public class ReducedMeasurement {
         builder.append(temperatureVal).append("\n");
         return builder.toString();
     }
+
+    public String getPhString(){
+        return null;
+    }
+    public String getSodiumString(){
+        return null;
+    }
+    public String getTemperatureString(){
+        return null;
+    }
 }

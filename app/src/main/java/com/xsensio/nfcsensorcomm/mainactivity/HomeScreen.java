@@ -1,6 +1,7 @@
 package com.xsensio.nfcsensorcomm.mainactivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.api.view.ButtonModeView;
 import com.xsensio.nfcsensorcomm.R;
+import com.xsensio.nfcsensorcomm.calibration.CalibrationActivity;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationProfileManager;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommContract;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.VirtualSensorAdapter;
@@ -47,6 +52,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class HomeScreen extends Fragment{
 
     private OnFragmentInteractionListener mListener;
+    private ImageView phone;
 
     public HomeScreen() {
         // Required empty public constructor
@@ -58,8 +64,6 @@ public class HomeScreen extends Fragment{
     }
 
     private Button mReadSensorsButton;
-    private boolean[] sensorAccess={true,true,true};
-    private ProgressBar[] sensorProgs=new ProgressBar[3];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,37 +82,48 @@ public class HomeScreen extends Fragment{
                 ((MainActivity)getActivity()).hideHomeScreen();
             }
         });
+        Button calibrate = view.findViewById(R.id.hm_calibrate);
+        calibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CalibrationActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button history = view.findViewById(R.id.hm_history);
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).changeFragment("historyScreen");
+            }
+        });
         mReadSensorsButton=view.findViewById(R.id.hm_readSensors);
         mReadSensorsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i=0;i<3;i++){
-                    sensorProgs[i].setProgress(0);
-                }
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                int numSamplesReadoutsCase1 = Integer.valueOf(settings.getString("num_samples_roc1", getString(R.string.num_samples_roc1_def_val)));
-                int numSamplesReadoutsCase2 = Integer.valueOf(settings.getString("num_samples_roc2", getString(R.string.num_samples_roc2_def_val)));
-                int numSamplesReadoutsCase3 = Integer.valueOf(settings.getString("num_samples_roc3", getString(R.string.num_samples_roc3_def_val)));
-                int sensorSelect = Integer.valueOf(settings.getString("sensor_select","10"));
-                int sampleRate = Integer.valueOf(settings.getString("sampling_frequency","5"));
-
-                PhoneMcuCommand command = new PhoneMcuCommand(
-                        getActivity().getApplicationContext(),
-                        sensorAccess[0],
-                        sensorAccess[1],
-                        sensorAccess[2],
-                        false,
-                        numSamplesReadoutsCase1,
-                        numSamplesReadoutsCase2,
-                        numSamplesReadoutsCase3,
-                        sensorSelect,
-                        sampleRate
-                );
-
-                ((MainActivity)getActivity()).sensorCommFragment.mPresenter.readSensors(command);
-                ((MainActivity)getActivity()).changeFragment("loadingScreen");
+                ((MainActivity)getActivity()).readSensors();
             }
         });
+
+        phone=view.findViewById(R.id.hs_phone);
+        Animation animation= AnimationUtils.loadAnimation(getActivity(),R.anim.home_screen_phone_anim);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                phone.startAnimation(animation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        phone.startAnimation(animation);
         return view;
     }
 
@@ -140,16 +155,6 @@ public class HomeScreen extends Fragment{
         mReadSensorsButton.setEnabled(enabled);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

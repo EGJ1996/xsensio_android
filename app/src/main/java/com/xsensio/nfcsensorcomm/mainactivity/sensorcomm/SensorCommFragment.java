@@ -222,7 +222,7 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     @Override
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
         MainActivity mainActivity=(MainActivity)getActivity();
-        if(mainActivity.ishomescreen){
+        if(mainActivity.currentScreen!="main"){
             mainActivity.loadingScreen.updateReadSensorProgress(taskDescription,completionRatio);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);

@@ -1,29 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.xsensio.nfcsensorcomm.mainactivity.LoadingScreen">
 
-    <RelativeLayout
+    <com.github.lzyzsd.circleprogress.DonutProgress
+        android:id="@+id/ls_progress"
+        android:layout_width="182dp"
+        android:layout_height="182dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        app:donut_finished_color="@color/colorPrimary"
+        app:donut_inner_bottom_text_color="@color/colorPrimary"
+        app:donut_text_color="@color/colorPrimary"
+        app:donut_text_size="30dp"
+        app:donut_finished_stroke_width="15dp"
+        app:donut_unfinished_stroke_width="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp">
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Reading Sensors..."
+        android:textColor="@color/colorPrimary"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ls_progress" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Loading Screen"
-            android:textSize="40dp"/>
-
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ls_progress_bar"
-            android:layout_alignParentBottom="true"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            />
-    </RelativeLayout>
-
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

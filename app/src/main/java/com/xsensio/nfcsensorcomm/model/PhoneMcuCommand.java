@@ -210,20 +210,20 @@ public class PhoneMcuCommand implements Parcelable, Serializable {
     public ArrayList<VirtualSensor> getVirtualSensorsToFill(Context context) {
         ArrayList<VirtualSensor> list = new ArrayList<>();
 
-        if (mNumSamplesForRoc1 > 0) {
-            if (mSensor1) {
-                list.add(new Sensor1Case1(context, this));
-            }
-            if (mSensor2) {
-                list.add(new Sensor2Case1(context, this));
-            }
-            if (mSensor3) {
-                list.add(new Sensor3Case1(context, this));
-            }
-            if (mSensor4) {
-                list.add(new Sensor4Case1(context, this));
-            }
-        }
+//        if (mNumSamplesForRoc1 > 0) {
+//            if (mSensor1) {
+//                list.add(new Sensor1Case1(context, this));
+//            }
+//            if (mSensor2) {
+//                list.add(new Sensor2Case1(context, this));
+//            }
+//            if (mSensor3) {
+//                list.add(new Sensor3Case1(context, this));
+//            }
+//            if (mSensor4) {
+//                list.add(new Sensor4Case1(context, this));
+//            }
+//        }
 
         if (mNumSamplesForRoc2 > 0) {
             if (mSensor1) {

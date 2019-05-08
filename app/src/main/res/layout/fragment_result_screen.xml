@@ -1,56 +1,157 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.xsensio.nfcsensorcomm.mainactivity.ResultScreen">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/rs_dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="Result on: 2019-05-03 00:36"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/arc_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        app:arc_angle="120"
+        app:arc_bottom_text="pH Value"
+        app:arc_bottom_text_size="36dp"
+        app:arc_finished_color="@color/colorPrimary"
+        app:arc_progress="10"
+        app:arc_stroke_width="20dp"
+        app:arc_suffix_text=" mol/L"
+        app:arc_text_color="@color/colorPrimary"
+        app:arc_unfinished_color="@color/colorSecondary"
+        app:layout_constraintBottom_toTopOf="@+id/arc_progress2"
+        app:layout_constraintTop_toBottomOf="@+id/rs_dateTime" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="Date Time"
-            android:id="@+id/rs_dateTime"/>
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress2"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        app:arc_angle="120"
+        app:arc_bottom_text="Sodium"
+        app:arc_bottom_text_size="36dp"
+        app:arc_finished_color="@color/colorPrimary"
+        app:arc_progress="50"
+        app:arc_stroke_width="20dp"
+        app:arc_suffix_text=" "
+        app:arc_text_color="@color/colorPrimary"
+        app:arc_unfinished_color="@color/colorSecondary"
+        app:layout_constraintBottom_toTopOf="@+id/arc_progress3"
+        app:layout_constraintTop_toBottomOf="@+id/arc_progress" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="pH"
-            android:id="@+id/rs_ph"/>
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress3"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        app:arc_angle="120"
+        app:arc_bottom_text="Temperature"
+        app:arc_bottom_text_size="36dp"
+        app:arc_finished_color="@color/colorPrimary"
+        app:arc_progress="100"
+        app:arc_stroke_width="20dp"
+        app:arc_suffix_text=" C"
+        app:arc_text_color="@color/colorPrimary"
+        app:arc_unfinished_color="@color/colorSecondary"
+        app:layout_constraintBottom_toTopOf="@+id/rs_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/arc_progress2" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="Sodium"
-            android:id="@+id/rs_sodium"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="Temperature"
-            android:id="@+id/rs_temperature"/>
+    <LinearLayout
+        android:id="@+id/rs_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="8dp">
 
         <Button
+            android:id="@+id/rs_history"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Measurement"
-            android:textSize="20dp"
-            android:id="@+id/rs_newMeasurement"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="history"
+            android:textColor="@color/white" />
 
         <Button
+            android:id="@+id/rs_newMeasurement"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="History"
-            android:textSize="20dp"
-            android:id="@+id/rs_history"/>
-
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="read sensors"
+            android:textColor="@color/white" />
     </LinearLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Sodium"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/arc_progress"
+        app:layout_constraintVertical_bias="0.219" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="pH Value"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/arc_progress2"
+        app:layout_constraintVertical_bias="0.219" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Temperature"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/arc_progress3"
+        app:layout_constraintVertical_bias="0.219" />
+
+
+</android.support.constraint.ConstraintLayout>

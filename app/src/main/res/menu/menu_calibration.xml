@@ -22,6 +22,11 @@
         android:icon="@drawable/ic_delete_white_24px"
         myapp:showAsAction="always" />
 
+    <item android:id="@+id/action_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home_black_24dp"
+        myapp:showAsAction="always" />
+
     <item android:id="@+id/action_settings"
         android:title="Settings"
         myapp:showAsAction="collapseActionView" />

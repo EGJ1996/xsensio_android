@@ -37,6 +37,7 @@ import com.androidplot.xy.XYSeries;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.XYPlotWrapper;
 import com.xsensio.nfcsensorcomm.files.FileManagerActivity;
+import com.xsensio.nfcsensorcomm.mainactivity.MainActivity;
 import com.xsensio.nfcsensorcomm.model.CalibrationProfile;
 import com.xsensio.nfcsensorcomm.model.DataPoint;
 import com.xsensio.nfcsensorcomm.model.DataPointSeries;
@@ -421,6 +422,10 @@ public class CalibrationActivity extends AppCompatActivity implements Calibratio
                 return true;
             case R.id.action_files:
                 intent = new Intent(this, FileManagerActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_home:
+                intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
             default:

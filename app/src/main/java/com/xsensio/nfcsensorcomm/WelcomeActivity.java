@@ -9,7 +9,13 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.xsensio.nfcsensorcomm.calibration.CalibrationProfileManager;
 import com.xsensio.nfcsensorcomm.mainactivity.MainActivity;
+import com.xsensio.nfcsensorcomm.model.CalibrationProfile;
+import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensorDefinition;
+import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensorDefinitionCase2;
+
+import java.io.IOException;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -25,6 +31,28 @@ public class WelcomeActivity extends AppCompatActivity {
                 finish();
             }
         },1000);
+        createDefaultCalibrationProfile();
+    }
+
+    public void createDefaultCalibrationProfile(){
+        CalibrationProfile sensor1=CalibrationProfile.createCalibrationProfile(
+                "sensor1-default",
+                VirtualSensorDefinitionCase2.SENSOR_1,
+                "1 5 25",
+                "0.000001 0.00001 0.0001"
+        );
+        CalibrationProfile sensor2=CalibrationProfile.createCalibrationProfile(
+                "sensor2-default",
+                VirtualSensorDefinitionCase2.SENSOR_2,
+                "1 5 25",
+                "0.001 0.01 0.1"
+        );
+        try {
+            CalibrationProfileManager.saveCalibrationProfileInFile(this,sensor1);
+            CalibrationProfileManager.saveCalibrationProfileInFile(this,sensor2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

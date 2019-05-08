@@ -1,21 +1,31 @@
 package com.xsensio.nfcsensorcomm.mainactivity;
 
-import android.app.FragmentTransaction;
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +53,7 @@ import com.xsensio.nfcsensorcomm.mainactivity.phonetagcomm.PhoneTagCommPresenter
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommContract;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommFragment;
 import com.xsensio.nfcsensorcomm.mainactivity.sensorcomm.SensorCommPresenter;
+import com.xsensio.nfcsensorcomm.model.PhoneMcuCommand;
 import com.xsensio.nfcsensorcomm.model.ReducedMeasurement;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 import com.xsensio.nfcsensorcomm.settings.SettingsActivity;
@@ -55,9 +66,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 //TODO there is strange bug happening in NFC communication
@@ -66,7 +80,11 @@ import java.util.List;
 // The main method of this communication depends on broadcasting data and receiving. For example if you want to read tag
 // this code will just broadcast the command, and handlers will read data from tag and broadcast it back. I tried to fix the above
 // error but failed miserably. The initial method is somewhat vague and perhaps dangerous to modify. So proceed with care :)
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View,HomeScreen.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View,
+        HomeScreen.OnFragmentInteractionListener,
+        LoadingScreen.OnFragmentInteractionListener,
+        DataHistoryScreen.OnFragmentInteractionListener,
+        ResultScreen.OnFragmentInteractionListener{
 
     private static final String TAG = "MyActivity";
 
@@ -126,21 +144,40 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mHomeScreen=findViewById(R.id.home_screen_container);
         fragmentTransaction=getSupportFragmentManager().beginTransaction();
         changeFragment("homeScreen");
+
+        generateRandomHistoryData(10);
+    }
+
+    public void generateRandomHistoryData(int amount){
+        clearMeasurements();
+        Random generator=new Random();
+        LocalDateTime firstDay=LocalDateTime.now().minusDays(amount);
+        for (int i = 0; i < amount; i++) {
+            addMeasurement(new ReducedMeasurement(
+                    firstDay.plusDays(0),
+                    generator.nextFloat()*7,
+                    generator.nextFloat()*10,
+                    generator.nextFloat()*30+15
+            ));
+        }
     }
 
     public void changeFragment(String tag){
+        fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
+        currentScreen=tag;
         switch (tag){
             case "homeScreen":
-                fragmentTransaction.add(R.id.home_screen_container,homeScreen);
+                fragmentTransaction.replace(R.id.home_screen_container,homeScreen);
                 break;
             case "loadingScreen":
-                fragmentTransaction.add(R.id.home_screen_container,loadingScreen);
+                fragmentTransaction.replace(R.id.home_screen_container,loadingScreen);
                 break;
             case "resultScreen":
-                fragmentTransaction.add(R.id.home_screen_container,resultScreen);
+                fragmentTransaction.replace(R.id.home_screen_container,resultScreen);
                 break;
             case "historyScreen":
-                fragmentTransaction.add(R.id.home_screen_container,historyScreen);
+                fragmentTransaction.replace(R.id.home_screen_container,historyScreen);
                 break;
         }
         fragmentTransaction.commit();
@@ -156,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         if(!file.exists()){
             String object="date,ph,sodium,temperature\n";
             try {
+                file.createNewFile();
                 FileOutputStream fos =  new FileOutputStream(file);
                 fos.write(object.getBytes());
                 fos.close();
@@ -180,11 +218,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         if(!myDir.exists()){
             myDir.mkdir(); }
         File file=new File(myDir,"measurements.csv");
-        if(!file.exists()){
-            file.delete();
+        if(file.exists()){
+            try {
+                new PrintWriter(file).close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public ArrayList<ReducedMeasurement> getMeasurements(){
         ArrayList<ReducedMeasurement> results=new ArrayList<>();
         File external= Environment.getExternalStorageDirectory();
@@ -216,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mViewPager.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.GONE);
         mHomeScreen.setVisibility(View.VISIBLE);
-        ishomescreen=true;
+        currentScreen="homeScreen";
     }
 
     public void hideHomeScreen(){
@@ -224,17 +267,53 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mViewPager.setVisibility(View.VISIBLE);
         mTabLayout.setVisibility(View.VISIBLE);
         mHomeScreen.setVisibility(View.GONE);
-        ishomescreen=false;
+        currentScreen="main";
     }
 
-    public boolean ishomescreen=true;
+    public String currentScreen="homeScreen";
     @Override
     public void onBackPressed() {
-        if(ishomescreen){
-            super.onBackPressed();
-        } else {
-            showHomeScreen();
+        switch (currentScreen) {
+            case "main":
+                showHomeScreen();
+                break;
+            case "homeScreen":
+                hideHomeScreen();
+                break;
+            case "loadingScreen":
+                changeFragment("homeScreen");
+                break;
+            case "resultScreen":
+                changeFragment("homeScreen");
+                break;
+            case "historyScreen":
+                changeFragment("homeScreen");
+                break;
         }
+        showHomeScreen();
+    }
+
+    public void readSensors(){
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        int numSamplesReadoutsCase1 = Integer.valueOf(settings.getString("num_samples_roc1", getString(R.string.num_samples_roc1_def_val)));
+        int numSamplesReadoutsCase2 = Integer.valueOf(settings.getString("num_samples_roc2", getString(R.string.num_samples_roc2_def_val)));
+        int numSamplesReadoutsCase3 = Integer.valueOf(settings.getString("num_samples_roc3", getString(R.string.num_samples_roc3_def_val)));
+        int sensorSelect = Integer.valueOf(settings.getString("sensor_select","10"));
+        int sampleRate = Integer.valueOf(settings.getString("sampling_frequency","5"));
+        PhoneMcuCommand command = new PhoneMcuCommand(
+                getApplicationContext(),
+                true,
+                true,
+                true,
+                false,
+                numSamplesReadoutsCase1,
+                numSamplesReadoutsCase2,
+                numSamplesReadoutsCase3,
+                sensorSelect,
+                sampleRate
+        );
+        sensorCommFragment.mPresenter.readSensors(command);
+        changeFragment("loadingScreen");
     }
 
     SensorCommFragment sensorCommFragment;
