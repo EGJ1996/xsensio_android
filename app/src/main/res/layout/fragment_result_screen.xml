@@ -9,12 +9,13 @@
 
     <TextView
         android:id="@+id/rs_dateTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
         android:text="Result on: 2019-05-03 00:36"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/arc_progress"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,13 +28,11 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         app:arc_angle="120"
-        app:arc_bottom_text="pH Value"
-        app:arc_bottom_text_size="36dp"
         app:arc_finished_color="@color/colorPrimary"
         app:arc_progress="10"
         app:arc_stroke_width="20dp"
         app:arc_suffix_text=" mol/L"
-        app:arc_text_color="@color/colorPrimary"
+        app:arc_text_color="@color/white"
         app:arc_unfinished_color="@color/colorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/arc_progress2"
         app:layout_constraintTop_toBottomOf="@+id/rs_dateTime" />
@@ -47,13 +46,11 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         app:arc_angle="120"
-        app:arc_bottom_text="Sodium"
-        app:arc_bottom_text_size="36dp"
         app:arc_finished_color="@color/colorPrimary"
         app:arc_progress="50"
         app:arc_stroke_width="20dp"
         app:arc_suffix_text=" "
-        app:arc_text_color="@color/colorPrimary"
+        app:arc_text_color="@color/white"
         app:arc_unfinished_color="@color/colorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/arc_progress3"
         app:layout_constraintTop_toBottomOf="@+id/arc_progress" />
@@ -67,13 +64,11 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         app:arc_angle="120"
-        app:arc_bottom_text="Temperature"
-        app:arc_bottom_text_size="36dp"
         app:arc_finished_color="@color/colorPrimary"
         app:arc_progress="100"
         app:arc_stroke_width="20dp"
         app:arc_suffix_text=" C"
-        app:arc_text_color="@color/colorPrimary"
+        app:arc_text_color="@color/white"
         app:arc_unfinished_color="@color/colorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/rs_buttons"
         app:layout_constraintTop_toBottomOf="@+id/arc_progress2" />
@@ -109,15 +104,12 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:text="Sodium"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/arc_progress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/arc_progress"
+        app:layout_constraintStart_toStartOf="@+id/arc_progress"
         app:layout_constraintTop_toTopOf="@+id/arc_progress"
         app:layout_constraintVertical_bias="0.219" />
 
@@ -152,6 +144,75 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/arc_progress3"
         app:layout_constraintVertical_bias="0.219" />
+
+    <TextView
+        android:id="@+id/sodium_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="41.562"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress"
+        app:layout_constraintEnd_toEndOf="@+id/arc_progress"
+        app:layout_constraintStart_toStartOf="@+id/arc_progress"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="mol/L"
+        app:layout_constraintStart_toEndOf="@+id/sodium_val"
+        app:layout_constraintTop_toTopOf="@+id/sodium_val" />
+
+    <TextView
+        android:id="@+id/ph_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="41.562"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress2"
+        app:layout_constraintEnd_toEndOf="@+id/arc_progress2"
+        app:layout_constraintStart_toStartOf="@+id/arc_progress2"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@+id/ph_val"
+        app:layout_constraintTop_toTopOf="@+id/ph_val" />
+
+    <TextView
+        android:id="@+id/temperature_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="41.562"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/arc_progress3"
+        app:layout_constraintEnd_toEndOf="@+id/arc_progress3"
+        app:layout_constraintStart_toStartOf="@+id/arc_progress3"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintVertical_bias="0.096" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="C"
+        app:layout_constraintStart_toEndOf="@+id/temperature_val"
+        app:layout_constraintTop_toTopOf="@+id/temperature_val" />
 
 
 </android.support.constraint.ConstraintLayout>

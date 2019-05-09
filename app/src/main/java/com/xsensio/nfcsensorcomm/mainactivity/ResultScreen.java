@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationProfileManager;
 import com.xsensio.nfcsensorcomm.model.CalibrationProfile;
@@ -26,6 +27,7 @@ import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ResultScreen extends Fragment {
     private OnFragmentInteractionListener mListener;
@@ -33,6 +35,10 @@ public class ResultScreen extends Fragment {
     private TextView phValue;
     private TextView sodiumValue;
     private TextView temperatureValue;
+    private ArcProgress phProgress;
+    private ArcProgress sodiumProgress;
+    private ArcProgress temperatureProgress;
+    private TextView timeStamp;
     public ReducedMeasurement measurement;
 
     private Button history;
@@ -50,18 +56,13 @@ public class ResultScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result_screen, container, false);
-//        phValue=view.findViewById(R.id.rs_ph);
-//        sodiumValue=view.findViewById(R.id.rs_sodium);
-//        temperatureValue=view.findViewById(R.id.rs_temperature);
-//        if(measurement==null) {
-//            phValue.setText("NA");
-//            sodiumValue.setText("NA");
-//            temperatureValue.setText("NA");
-//        } else {
-//            phValue.setText(measurement.getPhString());
-//            sodiumValue.setText(measurement.getSodiumString());
-//            temperatureValue.setText(measurement.getTemperatureString());
-//        }
+        phProgress=view.findViewById(R.id.arc_progress2);
+        sodiumProgress=view.findViewById(R.id.arc_progress);
+        temperatureProgress=view.findViewById(R.id.arc_progress3);
+        phValue=view.findViewById(R.id.ph_val);
+        sodiumValue=view.findViewById(R.id.sodium_val);
+        temperatureValue=view.findViewById(R.id.temperature_val);
+        timeStamp=view.findViewById(R.id.rs_dateTime);
         history=view.findViewById(R.id.rs_history);
         history.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +77,14 @@ public class ResultScreen extends Fragment {
                 ((MainActivity)getActivity()).readSensors();
             }
         });
+        Random generator=new Random();
+        measurement=new ReducedMeasurement(
+                LocalDateTime.now(),
+                generator.nextFloat()*7,
+                generator.nextFloat()*10,
+                generator.nextFloat()*30+15
+        );
+        displayMeasurement();
         return view;
     }
 
@@ -128,11 +137,30 @@ public class ResultScreen extends Fragment {
         return profiles.get(profiles.size()-1);
     }
 
+    private void displayMeasurement(){
+        NumberFormat formatter = new DecimalFormat("###.###");
+        if(measurement==null){
+            timeStamp.setText("Result on: NA");
+            phProgress.setProgress(0);
+            phValue.setText("NA");
+            sodiumProgress.setProgress(0);
+            sodiumValue.setText("NA");
+            temperatureProgress.setProgress(0);
+            temperatureValue.setText("NA");
+        } else {
+            timeStamp.setText("Result on: "+measurement.getTimeStamp());
+            phProgress.setProgress(10);
+            phValue.setText(formatter.format(measurement.getPhVal()));
+            sodiumProgress.setProgress(50);
+            sodiumValue.setText(formatter.format(measurement.getSodiumVal()));
+            temperatureProgress.setProgress(100);
+            temperatureValue.setText(formatter.format(measurement.getTemperatureVal()));
+        }
+    }
+
     private void updateGui(){
         if(sensorResults.size()==0){
-            phValue.setText("NA");
-            sodiumValue.setText("NA");
-            temperatureValue.setText("NA");
+
         } else {
             double phVal=0;
             double sodiumVal=0;
@@ -146,36 +174,25 @@ public class ResultScreen extends Fragment {
                 if(sensorNumber==2){
                     //Todo 1: in order to display temperature instead of K+ concentration, 1st step: uncomment these 4 lines, and comment the following 4 lines, by junrui
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), null);
-                    NumberFormat formatter = new DecimalFormat("###.###");
                     temperatureVal=data.getAverageDerivative();
-                    average =  formatter.format(temperatureValue);
-                    average+="°C";
 //                    VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), selectedProfiles[sensorNumber]);
 //                    NumberFormat formatter = new DecimalFormat("###.###");
 //                    average =  formatter.format(Math.pow(10,data.getAverageMappedData())*1000);
-//                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
-                    temperatureValue.setText(average);
+//                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel()
                 } else if(sensorNumber==1){
                     //sensorNumber==1, display as concentration, by junrui
                     CalibrationProfile profile=getProfile(VirtualSensorDefinitionCase2.SENSOR_2);
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), profile);
-                    NumberFormat formatter = new DecimalFormat("###.###");
                     sodiumVal=Math.pow(10,data.getAverageMappedData())*1000;
-                    average =  formatter.format(sodiumVal);
-                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
-                    phValue.setText(average);
                 } else {
                     //sensorNumber==0, display as pH, by junrui
                     CalibrationProfile profile=getProfile(VirtualSensorDefinitionCase2.SENSOR_1);
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), profile);
-                    NumberFormat formatter = new DecimalFormat("###.###");
                     phVal=-data.getAverageMappedData();
-                    average =  formatter.format(phVal);
-                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel();
-                    sodiumValue.setText(average);
                 }
             }
             measurement=new ReducedMeasurement(LocalDateTime.now(),phVal,sodiumVal,temperatureVal);
+            displayMeasurement();
             ((MainActivity)getActivity()).addMeasurement(measurement);
         }
     }

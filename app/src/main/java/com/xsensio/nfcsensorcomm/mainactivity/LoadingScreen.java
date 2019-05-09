@@ -23,6 +23,7 @@ public class LoadingScreen extends Fragment {
     }
 
     private DonutProgress progress;
+    private TextView text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,32 +40,52 @@ public class LoadingScreen extends Fragment {
         progress.setProgress(0);
         final Handler handler1=new Handler();
         final Handler handler2=new Handler();
+        final Handler handler3=new Handler();
+        final Handler handler4=new Handler();
         handler1.postDelayed(new Runnable() {
             @Override
             public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",50);
+                updateReadSensorProgress("Receiving data for Sensor 1, Case 2",30);
             }
         },1000);
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",100);
+                updateReadSensorProgress("Receiving data for Sensor 2, Case 2",70);
             }
         },2000);
+        handler3.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",20);
+            }
+        },3000);
+        handler4.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",100);
+            }
+        },4000);
+        text=view.findViewById(R.id.ls_text);
+        text.setText("Connecting to circuit");
         return view;
     }
 
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
         switch (taskDescription) {
             case "Receiving data for Sensor 1, Case 2":
-                progress.setProgress(completionRatio/3);
+                progress.setProgress(completionRatio);
+                text.setText("Receiving data for Sensor 1/3");
                 break;
             case "Receiving data for Sensor 2, Case 2":
-                progress.setProgress(100/3+completionRatio/3);
+                progress.setProgress(completionRatio);
+                text.setText("Receiving data for Sensor 2/3");
                 break;
             case "Receiving data for Sensor 3, Case 2":
-                progress.setProgress(200/3+completionRatio/3);
+                progress.setProgress(completionRatio);
+                text.setText("Receiving data for Sensor 3/3");
                 if(completionRatio==100){
+                    text.setText("Finished Recieving Data");
                     ((MainActivity)getActivity()).changeFragment("resultScreen");
                 }
                 break;

@@ -69,13 +69,13 @@ public class ReducedMeasurement {
         return builder.toString();
     }
 
-    public String getPhString(){
-        return null;
-    }
-    public String getSodiumString(){
-        return null;
-    }
-    public String getTemperatureString(){
-        return null;
+    public String getTimeStamp(){
+        StringBuilder builder=new StringBuilder();
+        builder.append(dateTime.getYear()).append("/");
+        builder.append(dateTime.getMonthValue()).append("/");
+        builder.append(dateTime.getDayOfMonth()).append(" ");
+        builder.append(dateTime.getHour()).append(":");
+        builder.append(dateTime.getMinute());
+        return builder.toString();
     }
 }

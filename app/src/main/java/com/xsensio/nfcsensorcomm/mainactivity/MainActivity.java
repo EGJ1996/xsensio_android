@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         LocalDateTime firstDay=LocalDateTime.now().minusDays(amount);
         for (int i = 0; i < amount; i++) {
             addMeasurement(new ReducedMeasurement(
-                    firstDay.plusDays(0),
+                    firstDay.plusDays(i),
                     generator.nextFloat()*7,
                     generator.nextFloat()*10,
                     generator.nextFloat()*30+15
