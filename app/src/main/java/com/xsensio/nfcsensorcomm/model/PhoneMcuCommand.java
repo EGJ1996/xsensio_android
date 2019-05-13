@@ -240,20 +240,20 @@ public class PhoneMcuCommand implements Parcelable, Serializable {
 
         }
 
-        if (mNumSamplesForRoc3 > 0) {
-            if (mSensor1) {
-                list.add(new Sensor1Case3(context, this));
-            }
-            if (mSensor2) {
-                list.add(new Sensor2Case3(context, this));
-            }
-            if (mSensor3) {
-                list.add(new Sensor3Case3(context, this));
-            }
-            if (mSensor4) {
-                list.add(new Sensor4Case3(context, this));
-            }
-        }
+//        if (mNumSamplesForRoc3 > 0) {
+//            if (mSensor1) {
+//                list.add(new Sensor1Case3(context, this));
+//            }
+//            if (mSensor2) {
+//                list.add(new Sensor2Case3(context, this));
+//            }
+//            if (mSensor3) {
+//                list.add(new Sensor3Case3(context, this));
+//            }
+//            if (mSensor4) {
+//                list.add(new Sensor4Case3(context, this));
+//            }
+//        }
 
         return list;
     }

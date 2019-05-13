@@ -38,14 +38,14 @@ public class WelcomeActivity extends AppCompatActivity {
         CalibrationProfile sensor1=CalibrationProfile.createCalibrationProfile(
                 "sensor1-default",
                 VirtualSensorDefinitionCase2.SENSOR_1,
-                "1 5 25",
-                "0.000001 0.00001 0.0001"
+                "0 1 5 25",
+                "0 0.000001 0.00001 0.0001"
         );
         CalibrationProfile sensor2=CalibrationProfile.createCalibrationProfile(
                 "sensor2-default",
                 VirtualSensorDefinitionCase2.SENSOR_2,
-                "1 5 25",
-                "0.001 0.01 0.1"
+                "0 1 5 25",
+                "0 0.001 0.01 0.1"
         );
         try {
             CalibrationProfileManager.saveCalibrationProfileInFile(this,sensor1);

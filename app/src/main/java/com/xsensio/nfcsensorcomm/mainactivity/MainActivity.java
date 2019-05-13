@@ -186,17 +186,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void addMeasurement(ReducedMeasurement measurement){
         //SAVING to EXTERNAL
         File external= Environment.getExternalStorageDirectory();
-        File myDir=new File(external,"/xsensio");
+        File myDir=new File(external,"xsensio");
         if(!myDir.exists()){
             myDir.mkdir(); }
         File file=new File(myDir,"measurements.csv");
         if(!file.exists()){
-            String object="date,ph,sodium,temperature\n";
             try {
                 file.createNewFile();
-                FileOutputStream fos =  new FileOutputStream(file);
-                fos.write(object.getBytes());
-                fos.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -214,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     public void clearMeasurements(){
         File external= Environment.getExternalStorageDirectory();
-        File myDir=new File(external,"/xsensio");
+        File myDir=new File(external,"xsensio");
         if(!myDir.exists()){
             myDir.mkdir(); }
         File file=new File(myDir,"measurements.csv");
@@ -231,22 +227,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public ArrayList<ReducedMeasurement> getMeasurements(){
         ArrayList<ReducedMeasurement> results=new ArrayList<>();
         File external= Environment.getExternalStorageDirectory();
-        File myDir=new File(external,"/xsensio");
+        File myDir=new File(external,"xsensio");
         if(!myDir.exists()){
-            return null; }
+            return results; }
         File file=new File(myDir,"measurements.csv");
         if(!file.exists()){
-            return null;
+            return results;
         }
         boolean isHeader=true;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
-                if(isHeader){
-                    isHeader=false;
-                } else {
-                    results.add(new ReducedMeasurement(sCurrentLine));
-                }
+                results.add(new ReducedMeasurement(sCurrentLine));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -59,6 +59,18 @@ public class ReducedMeasurement {
         this.temperatureVal = temperatureVal;
     }
 
+    public boolean isPhValid(){
+        return Double.isFinite(phVal);
+    }
+
+    public boolean isSodiumValid(){
+        return Double.isFinite(sodiumVal);
+    }
+
+    public boolean isTemperatureValid(){
+        return Double.isFinite(temperatureVal);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder=new StringBuilder();

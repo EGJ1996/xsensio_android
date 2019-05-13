@@ -176,7 +176,8 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
                 double calc=SignalProcessor.getRightSampleRate(mSamples,sample_freq_idx);
                 idealSampleRate=SignalProcessor.closest(calc);
                 derivatives = SignalProcessor.derivative(mSamples,mEffectiveSamplingFrequency);
-                mAverageDerivative=SignalProcessor.mean(derivatives,true);
+//                mAverageDerivative=SignalProcessor.mean(derivatives,true);
+                mAverageDerivative=SignalProcessor.SlopeCalc(mSamples,mEffectiveSamplingFrequency);
             }
             List<DataPoint> derivativeDatapoints = formDataVsTimeDataPoints(derivatives, mTimescale);
             mDerivativesDp=new ArrayList<>(derivativeDatapoints);

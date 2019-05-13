@@ -31,17 +31,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class DataHistoryScreen extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
     private Button backButton;
-    private ArrayList<ReducedMeasurement> graphData;
+    private ArrayList<ReducedMeasurement> graphData=new ArrayList<>();
     private LineChart graph1;
     private LineChart graph2;
     private LineChart graph3;
@@ -66,6 +62,17 @@ public class DataHistoryScreen extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+        Button clearButton=view.findViewById(R.id.hs_clear);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).clearMeasurements();
+                graph1.invalidate();
+                graph2.invalidate();
+                graph3.invalidate();
+                plot();
+            }
+        });
         graphData=((MainActivity)getActivity()).getMeasurements();
 
         graph1=view.findViewById(R.id.hs_graph1);
@@ -80,6 +87,8 @@ public class DataHistoryScreen extends Fragment {
         return view;
     }
 
+    boolean precise=false;
+
     private void initGraph(LineChart graph){
         graph.getDescription().setEnabled(false);
         graph.setDragEnabled(true);
@@ -91,9 +100,9 @@ public class DataHistoryScreen extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.parseColor("#888888"));
         xAxis.setGridColor(Color.parseColor("#888888"));
-        xAxis.setGranularity(1f); // one hour
         xAxis.setValueFormatter(new ValueFormatter() {
 
+            //private final DateTimeFormatter mFormatPrecise =  DateTimeFormatter.ofPattern("MM/dd-HH");
             private final DateTimeFormatter mFormat =  DateTimeFormatter.ofPattern("MM/dd");
 
             @Override
@@ -117,18 +126,24 @@ public class DataHistoryScreen extends Fragment {
         ArrayList<Entry> values2 = new ArrayList<>();
         ArrayList<Entry> values3 = new ArrayList<>();
         for (ReducedMeasurement graphDatum : graphData) {
-            values1.add(new Entry(
-                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                    (float)graphDatum.getSodiumVal()
-            ));
-            values2.add(new Entry(
-                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                    (float)graphDatum.getPhVal()
-            ));
-            values3.add(new Entry(
-                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                    (float)graphDatum.getTemperatureVal()
-            ));
+            if(graphDatum.isSodiumValid()){
+                values1.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getSodiumVal()
+                ));
+            }
+            if(graphDatum.isPhValid()){
+                values2.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getPhVal()
+                ));
+            }
+            if(graphDatum.isTemperatureValid()){
+                values3.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getTemperatureVal()
+                ));
+            }
         }
         plotLine(graph1,values1);
         plotLine(graph2,values2);
