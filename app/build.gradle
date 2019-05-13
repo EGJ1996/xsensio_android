@@ -19,8 +19,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.beardedhen:androidbootstrap:2.3.2'
-    implementation 'com.diogobernardino:williamchart:2.5.0'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.google.android.gms:play-services-plus:16.0.0'

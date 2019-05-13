@@ -149,13 +149,23 @@ public class ResultScreen extends Fragment {
             temperatureValue.setText("NA");
         } else {
             timeStamp.setText("Result on: "+measurement.getTimeStamp());
-            phProgress.setProgress(10);
+            phProgress.setProgress(phProgress(measurement.getPhVal()));
             phValue.setText(formatter.format(measurement.getPhVal()));
-            sodiumProgress.setProgress(50);
+            sodiumProgress.setProgress(sodiumProgress(measurement.getSodiumVal()));
             sodiumValue.setText(formatter.format(measurement.getSodiumVal()));
-            temperatureProgress.setProgress(100);
+            temperatureProgress.setProgress(temperatureProgress(measurement.getTemperatureVal()));
             temperatureValue.setText(formatter.format(measurement.getTemperatureVal()));
         }
+    }
+
+    private int temperatureProgress(double val){
+        return (int)((val-10)*(100/30));
+    }
+    private int sodiumProgress(double val){
+        return (int)(Math.log(val+1)*(100/Math.log(200)));
+    }
+    private int phProgress(double val){
+        return (int)((val-3)*(100/6));
     }
 
     private void updateGui(){

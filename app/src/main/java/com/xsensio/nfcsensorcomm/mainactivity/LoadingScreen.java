@@ -42,30 +42,30 @@ public class LoadingScreen extends Fragment {
         final Handler handler2=new Handler();
         final Handler handler3=new Handler();
         final Handler handler4=new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 1, Case 2",30);
-            }
-        },1000);
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 2, Case 2",70);
-            }
-        },2000);
-        handler3.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",20);
-            }
-        },3000);
-        handler4.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",100);
-            }
-        },4000);
+//        handler1.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateReadSensorProgress("Receiving data for Sensor 1, Case 2",30);
+//            }
+//        },1000);
+//        handler2.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateReadSensorProgress("Receiving data for Sensor 2, Case 2",70);
+//            }
+//        },2000);
+//        handler3.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",20);
+//            }
+//        },3000);
+//        handler4.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateReadSensorProgress("Receiving data for Sensor 3, Case 2",100);
+//            }
+//        },4000);
         text=view.findViewById(R.id.ls_text);
         text.setText("Connecting to circuit");
         return view;
