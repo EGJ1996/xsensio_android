@@ -71,6 +71,15 @@ public class LoadingScreen extends Fragment {
         return view;
     }
 
+    public void resetStats(){
+        if(progress!=null){
+            progress.setProgress(0);
+        }
+        if(text!=null){
+            text.setText("Connecting to circuit");
+        }
+    }
+
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
         switch (taskDescription) {
             case "Receiving data for Sensor 1, Case 2":

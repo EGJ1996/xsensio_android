@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            },0);
+        }
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 fragmentTransaction.replace(R.id.home_screen_container,homeScreen);
                 break;
             case "loadingScreen":
+                loadingScreen.resetStats();
                 fragmentTransaction.replace(R.id.home_screen_container,loadingScreen);
                 break;
             case "resultScreen":

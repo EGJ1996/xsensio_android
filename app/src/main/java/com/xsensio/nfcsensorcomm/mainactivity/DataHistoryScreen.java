@@ -165,11 +165,12 @@ public class DataHistoryScreen extends Fragment {
         set1.setDrawFilled(true);
         set1.setDrawCircles(true);
         set1.setCircleRadius(6f);
-
         LineData data = new LineData(set1);
         data.setValueTextColor(Color.WHITE);
         data.setValueTextSize(9f);
         graph.setData(data);
+        graph.getXAxis().setAxisMaximum(set1.getXMax());
+        graph.getXAxis().setAxisMinimum(set1.getXMin());
         graph.getLegend().setEnabled(false);
     }
 

@@ -159,13 +159,34 @@ public class ResultScreen extends Fragment {
     }
 
     private int temperatureProgress(double val){
-        return (int)((val-10)*(100/30));
+        int r=(int)((val-10)*(100/30));
+        if(r>100){
+            return 100;
+        } else if (r<0) {
+            return 0;
+        } else {
+            return r;
+        }
     }
     private int sodiumProgress(double val){
-        return (int)(Math.log(val+1)*(100/Math.log(200)));
+        int r = (int)(Math.log(val+1)*(100/Math.log(200)));
+        if(r>100){
+            return 100;
+        } else if (r<0) {
+            return 0;
+        } else {
+            return r;
+        }
     }
     private int phProgress(double val){
-        return (int)((val-3)*(100/6));
+        int r = (int)((val-3)*(100/6));
+        if(r>100){
+            return 100;
+        } else if (r<0) {
+            return 0;
+        } else {
+            return r;
+        }
     }
 
     private void updateGui(){
