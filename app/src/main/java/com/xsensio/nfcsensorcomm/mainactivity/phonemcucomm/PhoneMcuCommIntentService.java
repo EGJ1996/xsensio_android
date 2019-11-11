@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.Context;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
+import android.util.Log;
 
 import com.xsensio.nfcsensorcomm.OperationStatus;
 import com.xsensio.nfcsensorcomm.Utils;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
+import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 import com.xsensio.nfcsensorcomm.nfc.ExtendedModeComm;
 
 import java.io.IOException;
@@ -78,11 +81,14 @@ public class PhoneMcuCommIntentService extends IntentService {
             status = OperationStatus.READ_MCU_SUCCESS;
 
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         } catch (Exception e) {
             e.printStackTrace();
             status = OperationStatus.UNKNOWN_FAILURE;
@@ -119,11 +125,14 @@ public class PhoneMcuCommIntentService extends IntentService {
             status = OperationStatus.WRITE_MCU_SUCCESS;
 
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         } catch (Exception e) {
             e.printStackTrace();
             status = OperationStatus.UNKNOWN_FAILURE;

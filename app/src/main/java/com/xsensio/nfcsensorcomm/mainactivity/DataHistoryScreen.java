@@ -2,31 +2,29 @@ package com.xsensio.nfcsensorcomm.mainactivity;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.github.mikephil.charting.animation.Easing;
+import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.model.ReducedMeasurement;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -34,60 +32,66 @@ import java.util.ArrayList;
 
 public class DataHistoryScreen extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private HomeScreen.OnFragmentInteractionListener mListener;
 
-    private Button backButton;
     private ArrayList<ReducedMeasurement> graphData=new ArrayList<>();
+
+    private View global_view;
+    private ArrayList<Entry> values1;
+    private  ArrayList<Entry>values2;
+    private  ArrayList<Entry> values3;
+    private Button backButton;
     private LineChart graph1;
     private LineChart graph2;
     private LineChart graph3;
+    private int index = 10;
 
-    public DataHistoryScreen() {
+
+    void read_old(){
+        values1 = new ArrayList<>();
+        values2 = new ArrayList<>();
+        values3 = new ArrayList<>();
+
+        graphData=((MainActivity)getActivity()).getMeasurements();
+
+        for (ReducedMeasurement graphDatum : graphData) {
+            if(graphDatum.isSodiumValid()){
+                values1.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getSodiumVal()
+                ));
+            }
+            if(graphDatum.isPhValid()){
+                values2.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getPhVal()
+                ));
+            }
+            if(graphDatum.isTemperatureValid()){
+                values3.add(new Entry(
+                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                        (float)graphDatum.getTemperatureVal()
+                ));
+            }
+        }
+    }
+
+    public DataHistoryScreen () {
         // Required empty public constructor
     }
 
+    private DonutProgress progress;
+    private TextView text;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("Tag","Called onCreate\n");
         super.onCreate(savedInstanceState);
+        Global.nfc_set = false;
+//        read_old();
+        ((MainActivity)getActivity()).clearMeasurements();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_data_history_screen, container, false);
-        backButton=view.findViewById(R.id.hs_back);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-        Button clearButton=view.findViewById(R.id.hs_clear);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).clearMeasurements();
-                graph1.invalidate();
-                graph2.invalidate();
-                graph3.invalidate();
-                plot();
-            }
-        });
-        graphData=((MainActivity)getActivity()).getMeasurements();
-
-        graph1=view.findViewById(R.id.hs_graph1);
-        graph2=view.findViewById(R.id.hs_graph2);
-        graph3=view.findViewById(R.id.hs_graph3);
-
-        initGraph(graph1);
-        initGraph(graph2);
-        initGraph(graph3);
-        plot();
-
-        return view;
-    }
-
-    boolean precise=false;
 
     private void initGraph(LineChart graph){
         graph.getDescription().setEnabled(false);
@@ -121,34 +125,197 @@ public class DataHistoryScreen extends Fragment {
         rightAxis.setEnabled(false);
     }
 
-    public void plot(){
-        ArrayList<Entry> values1 = new ArrayList<>();
-        ArrayList<Entry> values2 = new ArrayList<>();
-        ArrayList<Entry> values3 = new ArrayList<>();
-        for (ReducedMeasurement graphDatum : graphData) {
-            if(graphDatum.isSodiumValid()){
-                values1.add(new Entry(
-                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                        (float)graphDatum.getSodiumVal()
-                ));
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_data_history_screen, container, false);
+        backButton=view.findViewById(R.id.hs_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
             }
-            if(graphDatum.isPhValid()){
-                values2.add(new Entry(
-                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                        (float)graphDatum.getPhVal()
-                ));
+        });
+
+       Button clearButton=view.findViewById(R.id.hs_clear);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).clearMeasurements();
+                graph1.invalidate();
+                graph2.invalidate();
+                graph3.invalidate();
+                plot();
             }
-            if(graphDatum.isTemperatureValid()){
-                values3.add(new Entry(
-                        graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
-                        (float)graphDatum.getTemperatureVal()
-                ));
+        });
+
+//        graphData=((MainActivity)getActivity()).getMeasurements();
+
+        graph1=view.findViewById(R.id.hs_graph1);
+        graph2=view.findViewById(R.id.hs_graph2);
+        graph3=view.findViewById(R.id.hs_graph3);
+
+        initGraph(graph1);
+        initGraph(graph2);
+        initGraph(graph3);
+        Log.d("Tag","Finished initializing the graph\n");
+
+        return view;
+    }
+
+    public void read_sensors(View final_view){
+
+        final Handler handler = new Handler();
+
+        class MyRunnable implements Runnable {
+            private Handler handler;
+            private View view1;
+            public MyRunnable(Handler handler, View view) {
+                this.handler = handler;
+                this.view1 = view;
+            }
+            @Override
+            public void run() {
+
+                Log.d("Tag","Inside run method\n");
+//                for(int i=0;i<1000;i++);
+
+                this.handler.postDelayed(this, 1000);
+
+
+//                ReducedMeasurement reduced = new ReducedMeasurement(LocalDateTime.now(),1.,2.,3.);
+
+//                Log.d("Tag","Data transmission succesful\n");
+
+
+//                if(graphData.size() > 0)
+//                    graphData.remove(0);
+//
+//                graphData.add(reduced);
+
+//                Log.d("Tag","Global.data_read = "+Global.data_read+"\n");
+                Log.d("Tag","Global.nfc_set = "+Global.nfc_set+"\n");
+//                Log.d("Tag","Activity = "+getActivity()+"\n");
+                Log.d("Tag","Before calling perform click\n");
+//                mReadSensorsButton.performClick();
+//                Global.global_button.performClick();
+//                ((MainActivity)(new HomeScreen()).getActivity()).readSensors();
+                ((MainActivity)getActivity()).readSensors();
+                Log.d("Tag","After calling perform click\n");
+
+                if(Global.data_read && Global.nfc_set) {
+                    graphData=((MainActivity)getActivity()).getMeasurements();
+                    for (ReducedMeasurement graphDatum : graphData) {
+                        if(graphDatum.isSodiumValid()){
+                            values1.add(new Entry(
+                                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                                    (float)graphDatum.getSodiumVal()
+                            ));
+                        }
+                        if(graphDatum.isPhValid()){
+                            values2.add(new Entry(
+                                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                                    (float)graphDatum.getPhVal()
+                            ));
+                        }
+                        if(graphDatum.isTemperatureValid()){
+                            values3.add(new Entry(
+                                    graphDatum.getDateTime().toEpochSecond(ZoneOffset.UTC),
+                                    (float)graphDatum.getTemperatureVal()
+                            ));
+                        }
+                    }
+//                    Global.global_button.performClick();
+//                    ((MainActivity)getActivity()).readSensors();
+//                    mReadSensorsButton.performClick();
+//                    ((MainActivity)HomeScreen.newInstance().getActivity()).readSensors();
+
+                    Log.d("Tag","Checkpoint 8\n");
+                    plot();
+                    Log.d("Tag","Checkpoint 9\n");
+                }
+
+//                try {
+//                    write_to_file(graphData);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
+        handler.post(new MyRunnable(handler, final_view));
+        Log.d("Tag","After running thread\n");
+
+    }
+
+    public void plot(){
+
+
+        Log.d("Tag","Before array initialization\n");
+//        initialize_arrays();
+        Log.d("Tag","Before array initialization\n");
         plotLine(graph1,values1);
         plotLine(graph2,values2);
         plotLine(graph3,values3);
+        Log.d("Tag","Finished plotting\n");
     }
+
+    public void add_data(View final_view){
+        Log.d("Tag","Called update view");
+        final Handler handler = new Handler();
+
+        class MyRunnable implements Runnable {
+            private Handler handler;
+            private View view1;
+            public MyRunnable(Handler handler, View view) {
+                this.handler = handler;
+                this.view1 = view;
+            }
+            @Override
+            public void run() {
+                Log.d("Tag","Inside run method\n");
+//                for(int i=0;i<1000;i++);
+
+                this.handler.postDelayed(this, 3000);
+
+
+//                ReducedMeasurement reduced = new ReducedMeasurement(LocalDateTime.now(),1.,2.,3.);
+
+//                Log.d("Tag","Data transmission succesful\n");
+
+
+//                if(graphData.size() > 0)
+//                    graphData.remove(0);
+//
+//                graphData.add(reduced);
+                ++index;
+                values1.add(new Entry(
+                        index,
+                        2*index
+                ));
+                values2.add(new Entry(
+                        index,
+                        5*index
+                ));
+                values3.add(new Entry(
+                        index,
+                        10*index
+                ));
+                Log.d("Tag","Checkpoint 8\n");
+                plot();
+                Log.d("Tag","Checkpoint 9\n");
+//                try {
+//                    write_to_file(graphData);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        }
+        handler.post(new MyRunnable(handler, final_view));
+        Log.d("Tag","After running thread\n");
+
+    }
+
     private void plotLine(LineChart graph, ArrayList<Entry> values){
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, " ");
@@ -174,11 +341,63 @@ public class DataHistoryScreen extends Fragment {
         graph.getLegend().setEnabled(false);
     }
 
+
+
+
+    public void resetStats(){
+        if(progress!=null){
+            progress.setProgress(0);
+        }
+        if(text!=null){
+            text.setText("Connecting to circuit");
+        }
+    }
+
+    public void updateReadSensorProgress(String taskDescription, int completionRatio) {
+//        switch (taskDescription) {
+//            case "Receiving data for Sensor 1, Case 2":
+//                progress.setProgress(completionRatio);
+//                text.setText("Receiving data for Sensor 1/3");
+//                break;
+//            case "Receiving data for Sensor 2, Case 2":
+//                progress.setProgress(completionRatio);
+//                text.setText("Receiving data for Sensor 2/3");
+//                break;
+//            case "Receiving data for Sensor 3, Case 2":
+//                progress.setProgress(completionRatio);
+//                text.setText("Receiving data for Sensor 3/3");
+//                if(completionRatio==100){
+//                    text.setText("Finished Recieving Data");
+//                    ((MainActivity)getActivity()).changeFragment("resultScreen");
+//                    Global.data_read = true;
+//                }
+//                break;
+//        }
+
+        Log.d("Tag","Called update function in history screen with description = "+taskDescription+"\n");
+        switch (taskDescription){
+            case "Receiving data for Sensor1, Case2":
+                values1.add(new Entry(completionRatio,2*completionRatio));
+                break;
+
+            case "Receiving data for Sensor2, Case 2":
+                values2.add(new Entry(completionRatio,5*completionRatio));
+                break;
+
+            case "Receiving data for Sensor 3, Case 2":
+                values3.add(new Entry(completionRatio,10*completionRatio));
+                break;
+        }
+        plot();
+    }
+
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            mListener = (HomeScreen.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -192,7 +411,7 @@ public class DataHistoryScreen extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

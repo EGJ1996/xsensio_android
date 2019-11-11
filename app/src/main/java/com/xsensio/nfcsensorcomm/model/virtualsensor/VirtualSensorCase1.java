@@ -68,6 +68,10 @@ public abstract class VirtualSensorCase1 implements VirtualSensor {
         mReadoutsAsBytes = readoutBytes;
     }
 
+    public List<Byte> getReadoutBytes(){
+        return mReadoutsAsBytes;
+    }
+
     @Override
     public int getNumBytesToReceive() {
         return mNumBytesToReceive;
@@ -149,6 +153,7 @@ public abstract class VirtualSensorCase1 implements VirtualSensor {
         }
 
 
+
         private List<Double> computeMappedData(CalibrationProfile profile) {
             if (profile == null) {
                 return new ArrayList<>();
@@ -164,6 +169,7 @@ public abstract class VirtualSensorCase1 implements VirtualSensor {
 
             return mappedData;
         }
+
 
         private List<DataPoint> formDataVsTimeDataPoints(List<Double> abscissaData, TimescaleEnum timescale) {
             List<DataPoint> dataPoints = new ArrayList<>();

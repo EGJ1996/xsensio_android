@@ -6,8 +6,10 @@ import android.content.Context;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.xsensio.nfcsensorcomm.OperationStatus;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
 import com.xsensio.nfcsensorcomm.model.MemoryBlock;
 import com.xsensio.nfcsensorcomm.model.NfcTagConfiguration;
 import com.xsensio.nfcsensorcomm.nfc.NfcATagComm;
@@ -78,11 +80,15 @@ public class NfcTagConfigurationIntentService extends IntentService {
 
             status = OperationStatus.READ_TAG_CONFIGURATION_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
+
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         }
 
         Intent intent = new Intent(ACTION_READ_TAG_CONFIGURATION);
@@ -117,11 +123,14 @@ public class NfcTagConfigurationIntentService extends IntentService {
                 NfcATagComm.writeMultipleBlocks(tag, configAsMemoryBlockReordered);
                 status = OperationStatus.WRITE_TAG_CONFIGURATION_SUCCESS;
             } catch (TagLostException e) {
+                Log.d("Tag","Tag Lost exception\n");
                 e.printStackTrace();
                 status = OperationStatus.TAG_LOST;
+                Global.nfc_set = false;
             } catch (IOException e) {
                 e.printStackTrace();
                 status = OperationStatus.COMM_FAILURE;
+                Global.nfc_set = false;
             }
         } else {
             status = OperationStatus.TAG_CONFIGURATION_EMPTY;

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class ResultScreen extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("Tag","Called onCreateView from resultScreen\n");
         View view = inflater.inflate(R.layout.fragment_result_screen, container, false);
         phProgress=view.findViewById(R.id.arc_progress2);
         sodiumProgress=view.findViewById(R.id.arc_progress);
@@ -112,6 +114,8 @@ public class ResultScreen extends Fragment {
 
     List<VirtualSensor> sensorResults=new ArrayList<>();
     public void updateSensorResult(List<VirtualSensor> sensorResult) {
+        Log.d("Tag","Inside update sensor result of result screen\n");
+        Log.d("Tag","Size of sensorResult = "+sensorResult.size());
         sensorResults=sensorResult;
         updateGui();
     }
@@ -123,7 +127,9 @@ public class ResultScreen extends Fragment {
         try {
 
             // Load from the Settings the path of the folder containing the calibration profiles
+            Log.d("Tag","Before calling getActivity\n");
             Context context = getActivity().getApplicationContext();
+            Log.d("Tag","After calling getActivity\n");
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             String profilesFolderPath = settings.getString("calibration_folder_path", context.getString(R.string.calibration_folder_path_def_val));
 
@@ -189,7 +195,8 @@ public class ResultScreen extends Fragment {
         }
     }
 
-    private void updateGui(){
+    public void updateGui(){
+        Log.d("Tag","Called update GUI in result screen\n");
         if(sensorResults.size()==0){
 
         } else {
@@ -203,6 +210,7 @@ public class ResultScreen extends Fragment {
                 int sensorNumber = Integer.valueOf(definitionCase2.getSensorName().replace("Sensor ",""))-1;
                 String average="";
                 if(sensorNumber==2){
+                    Log.d("Tag","Inside sensorNumber2\n");
                     //Todo 1: in order to display temperature instead of K+ concentration, 1st step: uncomment these 4 lines, and comment the following 4 lines, by junrui
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), null);
                     temperatureVal=data.getAverageDerivative();
@@ -210,21 +218,30 @@ public class ResultScreen extends Fragment {
 //                    NumberFormat formatter = new DecimalFormat("###.###");
 //                    average =  formatter.format(Math.pow(10,data.getAverageMappedData())*1000);
 //                    average = average + definitionCase2.getMappedDataPlotMetadata().getYAxisUnitLabel()
+                    Log.d("Tag","Insie sensorNumber2\n");
                 } else if(sensorNumber==1){
+                    Log.d("Tag","Inside sensorNumber1\n");
+
                     //sensorNumber==1, display as concentration, by junrui
                     CalibrationProfile profile=getProfile(VirtualSensorDefinitionCase2.SENSOR_2);
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), profile);
                     sodiumVal=Math.pow(10,data.getAverageMappedData())*1000;
+                    Log.d("Tag","Inside sensorNumber1\n");
                 } else {
+                    Log.d("Tag","Sensor number = "+sensorNumber+"\n");
                     //sensorNumber==0, display as pH, by junrui
+                    Log.d("Tag","Sensor definition = "+VirtualSensorDefinitionCase2.SENSOR_1+"\n");
                     CalibrationProfile profile=getProfile(VirtualSensorDefinitionCase2.SENSOR_1);
+                    Log.d("Tag","Calling getProfile\n");
                     VirtualSensorCase2.DataContainer data = sensor.getDataContainer(getContext(), profile);
                     phVal=-data.getAverageMappedData();
+                    Log.d("Tag","Insie sensorNumber3\n");
                 }
             }
             measurement=new ReducedMeasurement(LocalDateTime.now(),phVal,sodiumVal,temperatureVal);
             displayMeasurement();
             ((MainActivity)getActivity()).addMeasurement(measurement);
+            Log.d("Tag","Finished updateGui function\n");
         }
     }
 }

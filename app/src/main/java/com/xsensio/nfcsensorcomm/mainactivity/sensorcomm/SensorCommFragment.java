@@ -1,6 +1,7 @@
 package com.xsensio.nfcsensorcomm.mainactivity.sensorcomm;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +32,7 @@ import com.xsensio.nfcsensorcomm.files.FileManagerActivity;
 import com.xsensio.nfcsensorcomm.mainactivity.CommContract;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.calibration.CalibrationActivity;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
 import com.xsensio.nfcsensorcomm.mainactivity.HomeScreen;
 import com.xsensio.nfcsensorcomm.mainactivity.MainActivity;
 import com.xsensio.nfcsensorcomm.model.PhoneMcuCommand;
@@ -113,6 +116,8 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
             @Override
             public void onClick(View v) {
 
+                Global.data_read = false;
+
                 updateSensorResult(new ArrayList<VirtualSensor>());
 
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -173,16 +178,16 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
         });
 
         getActivity().invalidateOptionsMenu();
-
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-        mProgressBar.setVisibility(View.GONE);
-        mProgressBar.setMax(0);
-        mProgressBar.setMax(100);
-        mProgressBar.setProgress(0);
-
-        mProgressBarValueTextview = (TextView) view.findViewById(R.id.progress_bar_value_tv);
-
-        mOperationStatusTv = (TextView) view.findViewById(R.id.read_status_tv);
+//
+//        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+//        mProgressBar.setVisibility(View.GONE);
+//        mProgressBar.setMax(0);
+//        mProgressBar.setMax(100);
+//        mProgressBar.setProgress(0);
+//
+//        mProgressBarValueTextview = (TextView) view.findViewById(R.id.progress_bar_value_tv);
+//
+//        mOperationStatusTv = (TextView) view.findViewById(R.id.read_status_tv);
 
         ((MainActivity)getActivity()).showHomeScreen();
         return view;
@@ -199,14 +204,17 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
     }
     @Override
     public void updateSensorResult(List<VirtualSensor> virtualSensors) {
+        Log.d("Tag","Before calling update sensor result in sensorcommfragment\n");
         MainActivity mainActivity=(MainActivity)getActivity();
+        Log.d("Tag","After calling update sensor result in sensorcommfragment\n");
         //This line is to communicate to homescreen fragment
-        mainActivity.resultScreen.updateSensorResult(virtualSensors);
-        mVirtualSensorsRows = virtualSensors;
-        mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
-        mSensorResultsListview.setAdapter(mSensorResultAdapter);
-        mProgressBar.setVisibility(View.GONE);
-        mProgressBarValueTextview.setVisibility(View.GONE);
+//        mainActivity.resultScreen.updateSensorResult(virtualSensors);
+        mainActivity.loadingScreen.updateSensorResult(virtualSensors);
+//        mVirtualSensorsRows = virtualSensors;
+//        mSensorResultAdapter = new VirtualSensorAdapter(getActivity(), mVirtualSensorsRows, this);
+//        mSensorResultsListview.setAdapter(mSensorResultAdapter);
+//        mProgressBar.setVisibility(View.GONE);
+//        mProgressBarValueTextview.setVisibility(View.GONE);
     }
 
     @Override
@@ -221,9 +229,12 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
 
     @Override
     public void updateReadSensorProgress(String taskDescription, int completionRatio) {
+        Log.d("Tag","Before calling get Activity in SensorFragment\n");
         MainActivity mainActivity=(MainActivity)getActivity();
+        Log.d("Tag","After calling get Activity in SensorFragment\n");
         if(mainActivity.currentScreen!="main"){
             mainActivity.loadingScreen.updateReadSensorProgress(taskDescription,completionRatio);
+//              mainActivity.loadingScreen.updateReadSensorProgress(taskDescription,completionRatio);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
             mProgressBarValueTextview.setVisibility(View.VISIBLE);
@@ -290,4 +301,5 @@ public class SensorCommFragment extends Fragment implements SensorCommContract.V
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

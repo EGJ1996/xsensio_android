@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface VirtualSensor extends Parcelable, Serializable {
 
+
+
     void saveReadoutBytesReceived(List<Byte> readoutBytes);
 
     int getNumBytesToReceive();

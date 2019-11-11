@@ -30,6 +30,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         fragmentTransaction=getSupportFragmentManager().beginTransaction();
         changeFragment("homeScreen");
 
-        generateRandomHistoryData(10);
+//        generateRandomHistoryData(10);
     }
 
     public void generateRandomHistoryData(int amount){
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     public void changeFragment(String tag){
+        Log.d("Tag","Insice change fragment function\n");
         fragmentTransaction=getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fragment_in,R.anim.fragment_out);
         currentScreen=tag;
@@ -188,17 +190,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 fragmentTransaction.replace(R.id.home_screen_container,historyScreen);
                 break;
         }
-        fragmentTransaction.commit();
+        fragmentTransaction.commitNow();
     }
 
     public void addMeasurement(ReducedMeasurement measurement){
         //SAVING to EXTERNAL
+        Log.d("Tag","Called add measurement\n");
         File external= Environment.getExternalStorageDirectory();
         File myDir=new File(external,"xsensio");
         if(!myDir.exists()){
             myDir.mkdir(); }
         File file=new File(myDir,"measurements.csv");
+        // Change to always create a new file
+        // Old code: if(!file.exists())
+        // Always write 1 measurement to file
         if(!file.exists()){
+            Log.d("Tag","File doesn't exist\n");
             try {
                 file.createNewFile();
             } catch (FileNotFoundException e) {
@@ -206,6 +213,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        else{
+            Log.d("Tag","File exists\n");
         }
         try {
             FileWriter fw = new FileWriter(file,true); //the true will append the new data
@@ -217,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     public void clearMeasurements(){
+        Log.d("Tag","Called clearMeasurements\n");
         File external= Environment.getExternalStorageDirectory();
         File myDir=new File(external,"xsensio");
         if(!myDir.exists()){
@@ -294,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     public void readSensors(){
+        Log.d("Tag","Inside read sensors function of main activity\n");
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         int numSamplesReadoutsCase1 = Integer.valueOf(settings.getString("num_samples_roc1", getString(R.string.num_samples_roc1_def_val)));
         int numSamplesReadoutsCase2 = Integer.valueOf(settings.getString("num_samples_roc2", getString(R.string.num_samples_roc2_def_val)));

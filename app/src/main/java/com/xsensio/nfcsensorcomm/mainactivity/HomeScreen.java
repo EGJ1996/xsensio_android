@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,8 @@ public class HomeScreen extends Fragment{
             }
         });
         mReadSensorsButton=view.findViewById(R.id.hm_readSensors);
+        Global.global_button = mReadSensorsButton;
+        Log.d("Tag","Activity = "+getActivity()+"\n");
         mReadSensorsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

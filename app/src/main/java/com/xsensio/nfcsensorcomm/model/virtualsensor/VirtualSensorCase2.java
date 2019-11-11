@@ -36,6 +36,7 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
 
     /** List of readouts coming from the sensor */
     private List<Byte> mReadoutsAsBytes;
+    private List<Byte> received_bytes;
 
     /** Total number of bytes to receive */
     private int mNumBytesToReceive;
@@ -54,10 +55,17 @@ public abstract class VirtualSensorCase2 implements VirtualSensor {
         mNumBytesToReceive = numSamplesToReceive * mNumBytesPerSample;
 
         mReadoutsAsBytes = new ArrayList<>();
+        received_bytes = new ArrayList<>();
     }
 
     public void saveReadoutBytesReceived(List<Byte> readouts) {
         mReadoutsAsBytes = new ArrayList<>(readouts);
+    }
+    public void write_bytes(){
+
+    }
+    public List<Byte>getReadoutBytes(){
+        return received_bytes;
     }
 
     @Override

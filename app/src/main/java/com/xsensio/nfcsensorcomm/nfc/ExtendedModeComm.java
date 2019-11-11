@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.xsensio.nfcsensorcomm.Utils;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
+import com.xsensio.nfcsensorcomm.model.virtualsensor.VirtualSensor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ public final class ExtendedModeComm {
      * @return true if there is fresh data to consume, false otherwise
      */
     public boolean checkForData() throws MaxNumRetriesReachedException, IOException {
+        Log.d("Tag","Check for data called\n");
         if (mNfcA.isConnected()) {
 
                 byte[] currentReceivedBytes = Utils.createByteArrayWithzeros(NUM_BYTE_PER_BLOCK);
@@ -115,6 +118,7 @@ public final class ExtendedModeComm {
      * @return a List of Byte objects
      */
     public List<Byte> read(int numByteToRead, int numRetries, String taskDescription) throws MaxNumRetriesReachedException, IOException {
+        Log.d("Tag","Reading bytes inside read function of extended mode communication\n");
 
         List<Byte> allReceivedBytes = new ArrayList<>();
 
@@ -132,6 +136,8 @@ public final class ExtendedModeComm {
 
                 // While the last two bits of the last received byte are NOT 01, keep reading
                 while (!"01".equals(lastTwoBitsOfFlagByte)) {
+
+                    Log.d("Tag","Reading bytes\n");
 
                     if (numRetries != 0) {
                         currentReceivedBytes = mNfcA.transceive(new byte[]{
@@ -181,6 +187,8 @@ public final class ExtendedModeComm {
                 //Log.d(TAG, "Result of WRITE: " + Utils.bytesToHexString(resultOfWrite));
             }
         } else {
+            Log.d("Tag","Tag disconnected\n");
+            Global.nfc_set = false;
             throw new TagLostException("Not connected to tag !");
         }
 

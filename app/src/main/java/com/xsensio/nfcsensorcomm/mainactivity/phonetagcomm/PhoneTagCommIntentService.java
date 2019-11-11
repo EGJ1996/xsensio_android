@@ -8,8 +8,10 @@ import android.nfc.NdefMessage;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.xsensio.nfcsensorcomm.OperationStatus;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
 import com.xsensio.nfcsensorcomm.model.Memory;
 import com.xsensio.nfcsensorcomm.model.MemoryBlock;
 import com.xsensio.nfcsensorcomm.nfc.NfcATagComm;
@@ -132,11 +134,15 @@ public class PhoneTagCommIntentService extends IntentService {
                 firstBlock = memoryBlocks.get(0);
             }
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
+
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         }
 
         Intent intent = new Intent(ACTION_READ_MEMORY_BLOCK);
@@ -154,11 +160,14 @@ public class PhoneTagCommIntentService extends IntentService {
             memoryBlocks = NfcATagComm.readMultipleBlocks(tag, Memory.getAllMemoryAddresses());
             status = OperationStatus.READ_MEMORY_BLOCK_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         }
 
         Intent intent = new Intent(ACTION_READ_ALL_MEMORY_BLOCKS);
@@ -175,11 +184,15 @@ public class PhoneTagCommIntentService extends IntentService {
             NfcATagComm.writeOneBlock(tag, memoryBlock);
             status = OperationStatus.WRITE_MEMORY_BLOCK_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
+
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         }
 
         Intent intent = new Intent(ACTION_WRITE_MEMORY_BLOCK);
@@ -197,11 +210,14 @@ public class PhoneTagCommIntentService extends IntentService {
             NfcATagComm.writeMultipleBlocks(tag, memoryBlocksToWrite);
             status = OperationStatus.WRITE_MEMORY_BLOCK_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         }
 
         Intent intent = new Intent(ACTION_RESET_TAG);
@@ -218,11 +234,14 @@ public class PhoneTagCommIntentService extends IntentService {
             ndefMessage = NfcNdefTagComm.readNdefTag(tag);
             status = OperationStatus.READ_NDEF_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         } catch (FormatException e) {
             e.printStackTrace();
             status = OperationStatus.FORMAT_ERROR;
@@ -244,11 +263,14 @@ public class PhoneTagCommIntentService extends IntentService {
             NfcNdefTagComm.writeNdefTag(tag, ndefMessage);
             status = OperationStatus.WRITE_NDEF_SUCCESS;
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         } catch (FormatException e) {
             e.printStackTrace();
             status = OperationStatus.FORMAT_ERROR;

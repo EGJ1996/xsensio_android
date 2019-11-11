@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xsensiohg-nfc-sensor-communication-app-edd458c7dee6.iml" filepath="$PROJECT_DIR$/xsensiohg-nfc-sensor-communication-app-edd458c7dee6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xsensio_final1.iml" filepath="$PROJECT_DIR$/xsensio_final1.iml" />
     </modules>
   </component>
 </project>

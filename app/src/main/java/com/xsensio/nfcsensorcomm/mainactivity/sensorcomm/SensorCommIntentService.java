@@ -1,5 +1,7 @@
 package com.xsensio.nfcsensorcomm.mainactivity.sensorcomm;
 
+
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.util.Log;
 import com.xsensio.nfcsensorcomm.OperationStatus;
 import com.xsensio.nfcsensorcomm.R;
 import com.xsensio.nfcsensorcomm.Utils;
+import com.xsensio.nfcsensorcomm.mainactivity.Global;
 import com.xsensio.nfcsensorcomm.model.PhoneMcuCommand;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.Sensor1Case2;
 import com.xsensio.nfcsensorcomm.model.virtualsensor.Sensor3Case2;
@@ -75,6 +78,7 @@ public class SensorCommIntentService extends IntentService {
 
     private void handleActionReadSensors(Tag tag, PhoneMcuCommand command) {
 
+
         boolean devMode = false;
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -118,6 +122,10 @@ public class SensorCommIntentService extends IntentService {
              * Read data sent in response to the command from
              * the MCU until all data is received
              */
+
+
+            Global.global_sensors = virtualSensors;
+
             for (VirtualSensor virtualSensor: virtualSensors) { // For each virtual sensor
 
                 String taskDescription = "Receiving data for " + virtualSensor.getVirtualSensorDefinition().toUserFriendlyString();
@@ -126,6 +134,9 @@ public class SensorCommIntentService extends IntentService {
 
                 Log.i(TAG, "Expecting data for " + virtualSensor.getVirtualSensorDefinition().toUserFriendlyString() + " ...");
                 Log.i(TAG, "Number of bytes expected is " + numBytesToReceive);
+
+                Log.d("Tag", "Expecting data for " + virtualSensor.getVirtualSensorDefinition().toUserFriendlyString() + " ...");
+                Log.d("Tag", "Number of bytes expected is " + numBytesToReceive);
 
                 List<Byte> bytesReceived = new ArrayList<>();
 
@@ -136,6 +147,8 @@ public class SensorCommIntentService extends IntentService {
                     // Read results
                     //Todo: This is were bytes are received
                     bytesReceived = comm.read(numBytesToReceive+2, maxNumRetries, taskDescription);
+//                    Log.d("Tag","Bytes Received = "+bytesReceived+"\n");
+//                    Log.d("Tag","Size of received bytes = "+bytesReceived.size()+"\n");
                 } else {
                     String filename = virtualSensor.getVirtualSensorDefinition().toString();
                    /*  Byte[] byteArray = new Byte[mReadoutsAsBytes.size()];
@@ -185,6 +198,7 @@ public class SensorCommIntentService extends IntentService {
                 virtualSensor.setReadDataDuration(duration);
 
                 Log.i(TAG, "Bytes received from MCU (in " + duration + " milliseconds): " + Utils.bytesToHexString(Utils.bytesListToArray(bytesReceived)));
+                Log.d("Tag", "Bytes received from MCU (in " + duration + " milliseconds): " + Utils.bytesToHexString(Utils.bytesListToArray(bytesReceived)));
 
                 // Save bytes received into virtual sensor
                 virtualSensor.saveReadoutBytesReceived(bytesReceived);
@@ -193,11 +207,14 @@ public class SensorCommIntentService extends IntentService {
             status = OperationStatus.READ_SENSORS_SUCCESS;
 
         } catch (TagLostException e) {
+            Log.d("Tag","Tag Lost exception\n");
             e.printStackTrace();
             status = OperationStatus.TAG_LOST;
+            Global.nfc_set = false;
         } catch (IOException e) {
             e.printStackTrace();
             status = OperationStatus.COMM_FAILURE;
+            Global.nfc_set = false;
         } catch (NoVirtualSensorsSpecifiedException e) {
             e.printStackTrace();
             status = OperationStatus.NO_VIRTUAL_SENSORS_SPECIFIED;

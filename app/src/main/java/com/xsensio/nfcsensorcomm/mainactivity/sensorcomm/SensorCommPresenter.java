@@ -98,7 +98,7 @@ public class SensorCommPresenter extends BroadcastReceiver implements SensorComm
             if (status == OperationStatus.READ_SENSORS_SUCCESS) {
                 mView.updateSensorResult(virtualSensors);
             }
-            mView.updateSensorResultStatus(status.toUserFriendlyString());
+//            mView.updateSensorResultStatus(status.toUserFriendlyString());
 
             mView.setReadSensorsButtonEnabled(true);
 

@@ -49,6 +49,7 @@ public class MainActivityPresenter extends BroadcastReceiver implements MainActi
                 || NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
 
             mView.showToast("Tag detected !");
+            Global.nfc_set = true;
             mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             // Extract Text-formattable (i.e. plain-text or URL) Ndef message from the tag, if any.
